@@ -37,6 +37,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 searchUserItems[0].login?.let { Log.d("test", it) }
                 adapter.setData(searchUserItems)
                 showLoading(false)
+            }else {
+                showLoading(false)
             }
         })
 
@@ -82,8 +84,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun showLoading(state: Boolean){
         if (state){
             binding.progressbar?.visibility = View.VISIBLE
+            binding.rvSearchUser?.visibility = View.GONE
         }else {
             binding.progressbar?.visibility = View.GONE
+            binding.rvSearchUser?.visibility = View.VISIBLE
         }
     }
 

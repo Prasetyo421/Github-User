@@ -36,19 +36,20 @@ class SearchUserViewModel: ViewModel() {
                     val responseObject = JSONObject(result)
                     val list = responseObject.getJSONArray("items")
 
-                    Log.d(TAG, result)
-                    for (i in 0 until list.length()) {
-                        val user = list.getJSONObject(i)
-                        val login = user.getString("login")
-                        val avatr_url = user.getString("avatar_url")
-                        val url_detail = user.getString("url")
-                        val html_url = user.getString("html_url")
-                        val userItems = SearchUser(login, avatr_url, url_detail, html_url)
-                        listItems.add(userItems)
+                    if (list.length() != 0){
+                        Log.d(TAG, result)
+                        for (i in 0 until list.length()) {
+                            val user = list.getJSONObject(i)
+                            val login = user.getString("login")
+                            val avatr_url = user.getString("avatar_url")
+                            val url_detail = user.getString("url")
+                            val html_url = user.getString("html_url")
+                            val userItems = SearchUser(login, avatr_url, url_detail, html_url)
+                            listItems.add(userItems)
+                        }
+
+                        listUsers.postValue(listItems)
                     }
-
-                    listUsers.postValue(listItems)
-
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Log.d(TAG, e.message.toString())
