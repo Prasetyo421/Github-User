@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Github User</string>
+    <string name="setting_language">setting language</string>
+    <string name="username">Username</string>
+    <string name="example_link">https://api.github.com/users/Prasetyo421</string>
+    <string name="detail">detail</string>
+    <string name="github">github</string>
+    <string name="folllowers">Followers</string>
+    <string name="following">Following</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="repositories">repositories</string>
+    <string name="home">Home</string>
+</resources>
