@@ -10,6 +10,8 @@ import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SearchUserViewModel: ViewModel() {
     companion object {
@@ -71,5 +73,6 @@ class SearchUserViewModel: ViewModel() {
     fun getSearchUser(): LiveData<ArrayList<SearchUser>> {
         return listUsers
     }
+
 
 }

@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.didi.githubuser.ViewModel.SearchUserViewModel
 import com.didi.githubuser.activity.DetailUserActivity

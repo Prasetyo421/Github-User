@@ -42,7 +42,7 @@
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_below="@+id/tv_info"
-        android:background="@drawable/bg_user"
+        android:background="@drawable/bg_info_user"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
