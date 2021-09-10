@@ -14,7 +14,6 @@ import com.didi.githubuser.ViewModel.DetailUserViewModel
 import com.didi.githubuser.databinding.ActivityDetailUserBinding
 import com.didi.githubuser.helper.SectionsPagerAdapter
 import com.didi.githubuser.helper.ZoomOutPageTransformer
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailUserActivity : AppCompatActivity() {
@@ -26,7 +25,7 @@ class DetailUserActivity : AppCompatActivity() {
         lateinit var username: String
         @StringRes
         private val TAB_TITTLES = intArrayOf(
-            R.string.folllowers,
+            R.string.followers,
             R.string.following
         )
     }

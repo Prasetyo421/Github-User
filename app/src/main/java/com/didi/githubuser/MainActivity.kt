@@ -6,18 +6,17 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.didi.githubuser.ViewModel.SearchUserViewModel
 import com.didi.githubuser.activity.DetailUserActivity
 import com.didi.githubuser.adapter.SearchUserAdapter
 import com.didi.githubuser.databinding.ActivityMainBinding
-import com.didi.githubuser.fragment.HomeFragment
 import com.didi.githubuser.model.SearchUser
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -34,12 +33,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         searchUserViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(SearchUserViewModel::class.java)
 
         searchUserViewModel.getSearchUser().observe(this, { searchUserItems ->
-            if (searchUserItems != null){
+            val size = searchUserItems?.size
+            Log.d("test", size.toString())
+            if (searchUserItems != null && size != 0){
+                Log.d("test", searchUserItems.size.toString())
                 searchUserItems[0].login?.let { Log.d("test", it) }
                 adapter.setData(searchUserItems)
                 showLoading(false)
+                showRv(true)
             }else {
                 showLoading(false)
+                showRv(false)
+                showNotFound(true)
             }
         })
 
@@ -78,8 +83,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.btnSetting?.setOnClickListener(this)
     }
 
-    private fun showSelectedUser(data: SearchUser){
-        Toast.makeText(this, "choose: ${data.login}", Toast.LENGTH_SHORT).show()
+    private fun showNotFound(state: Boolean){
+        if (state){
+            binding.imgNotFound?.visibility = View.VISIBLE
+        }else {
+            binding.imgNotFound?.visibility = View.GONE
+        }
+    }
+
+    private fun showRv(state: Boolean){
+        if (state){
+            binding.rvSearchUser?.visibility = View.VISIBLE
+        }else {
+            binding.rvSearchUser?.visibility = View.GONE
+        }
     }
 
     private fun showLoading(state: Boolean){
@@ -95,9 +112,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.btn_setting -> {
-                Toast.makeText(this, "setting language", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "setting language", Toast.LENGTH_SHORT).show()
+                Intent(Settings.ACTION_LOCALE_SETTINGS).also { startActivity(it) }
             }
-
         }
     }
 }

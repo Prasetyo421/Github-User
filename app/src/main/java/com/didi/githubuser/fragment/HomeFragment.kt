@@ -1,18 +1,14 @@
 package com.didi.githubuser.fragment
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.didi.githubuser.R
 import com.didi.githubuser.ViewModel.ListUsersViewModel
 import com.didi.githubuser.activity.DetailUserActivity
@@ -70,7 +66,7 @@ class HomeFragment : Fragment() {
             if (username != null) {
                 listUsersViewModel.setListUser("followers", username)
             }
-            binding.sectionLabel.text = getString(R.string.folllowers)
+            binding.sectionLabel.text = getString(R.string.followers)
 
         }else{
             if (username != null) {

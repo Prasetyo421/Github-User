@@ -16,7 +16,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GITHUB_API_KEY", "\"token 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\"")
+        buildConfigField("String", "GITHUB_API_KEY", "\"token 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\"")
         buildConfigField("String", "OPENWEATHER_API_KEY", "\"d8b21c07ae373d57cedb303d944e393e\"")
     }
 

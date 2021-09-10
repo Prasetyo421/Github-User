@@ -5,10 +5,11 @@
     <string name="example_link">https://api.github.com/users/Prasetyo421</string>
     <string name="detail">detail</string>
     <string name="github">github</string>
-    <string name="folllowers">Followers</string>
+    <string name="followers">Followers</string>
     <string name="following">Following</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="repositories">repositories</string>
     <string name="home">Home</string>
+    <string name="username_not_found">username not found</string>
 </resources>

@@ -9,6 +9,7 @@ import com.didi.githubuser.model.SearchUser
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
+import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -18,7 +19,7 @@ class SearchUserViewModel: ViewModel() {
         private val TAG = SearchUserViewModel::class.java.simpleName
     }
 
-    val listUsers = MutableLiveData<ArrayList<SearchUser>>()
+    val listUsers = MutableLiveData<ArrayList<SearchUser>?>()
 
     fun setSearchUser(username: String) {
         val listItems = ArrayList<SearchUser>()
@@ -36,10 +37,11 @@ class SearchUserViewModel: ViewModel() {
                 try {
                     val result = String(responseBody)
                     val responseObject = JSONObject(result)
-                    val list = responseObject.getJSONArray("items")
 
+                    val list = responseObject.getJSONArray("items")
+                    Log.d(TAG, result)
+                    Log.d(TAG, list.length().toString())
                     if (list.length() != 0){
-                        Log.d(TAG, result)
                         for (i in 0 until list.length()) {
                             val user = list.getJSONObject(i)
                             val login = user.getString("login")
@@ -49,10 +51,13 @@ class SearchUserViewModel: ViewModel() {
                             val userItems = SearchUser(login, avatr_url, url_detail, html_url)
                             listItems.add(userItems)
                         }
-
-                        listUsers.postValue(listItems)
                     }
+
+                    listUsers.postValue(listItems)
+                    Log.d(TAG, "setelah post value")
+
                 } catch (e: Exception) {
+                    listUsers.postValue(null)
                     e.printStackTrace()
                     Log.d(TAG, e.message.toString())
                 }
@@ -70,7 +75,7 @@ class SearchUserViewModel: ViewModel() {
         })
     }
 
-    fun getSearchUser(): LiveData<ArrayList<SearchUser>> {
+    fun getSearchUser(): MutableLiveData<ArrayList<SearchUser>?> {
         return listUsers
     }
 

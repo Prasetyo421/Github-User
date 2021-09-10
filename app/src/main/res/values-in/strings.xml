@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setting_language">atur bahasa</string>
+    <string name="username">nama pengguna</string>
+    <string name="detail">detail</string>
+    <string name="followers">pengikut</string>
+    <string name="following">diikuti</string>
+    <string name="repositories">repositories</string>
+    <string name="username_not_found">nama pengguna tidak ada</string>
+</resources>
