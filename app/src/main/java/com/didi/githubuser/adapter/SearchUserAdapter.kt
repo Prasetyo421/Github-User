@@ -10,6 +10,12 @@ import com.bumptech.glide.Glide
 import com.didi.githubuser.R
 import com.didi.githubuser.model.SearchUser
 import com.didi.githubuser.databinding.ListUserBinding
+import android.text.style.UnderlineSpan
+
+import android.text.SpannableString
+
+
+
 
 class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHolder>() {
     private val mData = ArrayList<SearchUser>()
@@ -35,8 +41,9 @@ class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHo
         fun bind(searchUser: SearchUser){
             with(itemView){
                 binding.tvUsername.text = searchUser.login
-//                binding.tvUrl.text = searchUser.url
-//                binding.tvUrlHtml.text = searchUser.html_url
+                val linkGithub = SpannableString(searchUser.html_url)
+                linkGithub.setSpan(UnderlineSpan(), 0, linkGithub.length, 0)
+                binding.tvUrlHtml.text = linkGithub
 
                 val url = searchUser.avatar_url
                 val uri = Uri.parse(url)

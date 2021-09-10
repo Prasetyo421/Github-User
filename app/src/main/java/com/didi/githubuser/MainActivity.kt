@@ -4,13 +4,14 @@ import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.SearchView
-import android.widget.Toast
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.didi.githubuser.ViewModel.SearchUserViewModel
@@ -37,7 +38,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             Log.d("test", size.toString())
             if (searchUserItems != null && size != 0){
                 Log.d("test", searchUserItems.size.toString())
-                searchUserItems[0].login?.let { Log.d("test", it) }
+                searchUserItems[0].login.let {
+                    if (it != null) {
+                        Log.d("test", it)
+                    }
+                }
                 adapter.setData(searchUserItems)
                 showLoading(false)
                 showRv(true)
@@ -51,8 +56,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         adapter = SearchUserAdapter()
         adapter.notifyDataSetChanged()
 
-        binding.rvSearchUser?.layoutManager = LinearLayoutManager(this)
-        binding.rvSearchUser?.adapter = adapter
+        binding.rvSearchUser.layoutManager = LinearLayoutManager(this)
+        binding.rvSearchUser.adapter = adapter
 
         adapter.setOnItemClickCallback(object : SearchUserAdapter.OnItemClickCallback{
             override fun onItemClicked(data: SearchUser) {
@@ -64,8 +69,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         })
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        binding.searchUsers?.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        binding.searchUsers?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        binding.searchUsers.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        binding.searchUsers.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query?.isEmpty() == false){
                     showLoading(true)
@@ -80,32 +85,34 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         })
 
-        binding.btnSetting?.setOnClickListener(this)
+        binding.btnSetting.setOnClickListener(this)
+        val tvGithub: TextView = findViewById(R.id.tv_url_html)
+        tvGithub.setOnClickListener(this)
     }
 
     private fun showNotFound(state: Boolean){
         if (state){
-            binding.imgNotFound?.visibility = View.VISIBLE
+            binding.imgNotFound.visibility = View.VISIBLE
         }else {
-            binding.imgNotFound?.visibility = View.GONE
+            binding.imgNotFound.visibility = View.GONE
         }
     }
 
     private fun showRv(state: Boolean){
         if (state){
-            binding.rvSearchUser?.visibility = View.VISIBLE
+            binding.rvSearchUser.visibility = View.VISIBLE
         }else {
-            binding.rvSearchUser?.visibility = View.GONE
+            binding.rvSearchUser.visibility = View.GONE
         }
     }
 
     private fun showLoading(state: Boolean){
         if (state){
-            binding.progressbar?.visibility = View.VISIBLE
-            binding.rvSearchUser?.visibility = View.GONE
+            binding.progressbar.visibility = View.VISIBLE
+            binding.rvSearchUser.visibility = View.GONE
         }else {
-            binding.progressbar?.visibility = View.GONE
-            binding.rvSearchUser?.visibility = View.VISIBLE
+            binding.progressbar.visibility = View.GONE
+            binding.rvSearchUser.visibility = View.VISIBLE
         }
     }
 
@@ -114,6 +121,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btn_setting -> {
 //                Toast.makeText(this, "setting language", Toast.LENGTH_SHORT).show()
                 Intent(Settings.ACTION_LOCALE_SETTINGS).also { startActivity(it) }
+            }
+            R.id.tv_url_html -> {
+                val url = findViewById<TextView>(R.id.tv_url_html).text.toString()
+                val uri = Uri.parse(url)
+                Intent(Intent.ACTION_VIEW, uri).also { startActivity(it) }
             }
         }
     }

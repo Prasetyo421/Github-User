@@ -39,8 +39,8 @@ class SearchUserViewModel: ViewModel() {
                     val responseObject = JSONObject(result)
 
                     val list = responseObject.getJSONArray("items")
-                    Log.d(TAG, result)
-                    Log.d(TAG, list.length().toString())
+                    Log.d(TAG + " result", result)
+                    Log.d(TAG + " list", list.length().toString())
                     if (list.length() != 0){
                         for (i in 0 until list.length()) {
                             val user = list.getJSONObject(i)
@@ -57,9 +57,8 @@ class SearchUserViewModel: ViewModel() {
                     Log.d(TAG, "setelah post value")
 
                 } catch (e: Exception) {
-                    listUsers.postValue(null)
                     e.printStackTrace()
-                    Log.d(TAG, e.message.toString())
+                    Log.d(TAG + " error", e.message.toString())
                 }
             }
 
@@ -69,7 +68,8 @@ class SearchUserViewModel: ViewModel() {
                 responseBody: ByteArray?,
                 error: Throwable?
             ) {
-                Log.d(TAG, error?.message.toString())
+                Log.d(TAG + " failure", error?.message.toString())
+                listUsers.postValue(listItems)
             }
 
         })

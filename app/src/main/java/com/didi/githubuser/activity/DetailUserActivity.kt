@@ -48,6 +48,8 @@ class DetailUserActivity : AppCompatActivity() {
 
                 username = detailUserItem.login
 
+                binding.collapsingToolbar.title = username
+
                 val url = detailUserItem.avatar_url
                 val uri = Uri.parse(url)
                 Glide.with(this)

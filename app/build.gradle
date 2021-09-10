@@ -16,7 +16,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GITHUB_API_KEY", "\"token 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\"")
+        buildConfigField("String", "GITHUB_API_KEY", "\"token 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\"")
         buildConfigField("String", "OPENWEATHER_API_KEY", "\"d8b21c07ae373d57cedb303d944e393e\"")
     }
 
@@ -52,13 +52,11 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
     implementation "android.arch.navigation:navigation-ui-ktx:1.0.0"
-    implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation "androidx.viewpager2:viewpager2:1.0.0"
