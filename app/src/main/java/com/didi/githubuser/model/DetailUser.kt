@@ -12,5 +12,6 @@ data class DetailUser(
     val  follower: Int,
     val  following: Int,
     val  repository: Int,
-    val  location: String?
+    val  location: String?,
+    val  github_url: String?
 ): Parcelable

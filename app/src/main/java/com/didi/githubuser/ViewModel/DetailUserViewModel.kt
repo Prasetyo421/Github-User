@@ -46,8 +46,9 @@ class DetailUserViewModel: ViewModel() {
                     val follower = responseObject.getInt("followers")
                     val following = responseObject.getInt("following")
                     val repository = responseObject.getInt("public_repos")
+                    val github_url = responseObject.getString("html_url")
 
-                    val user = DetailUser(login, name, avatar_url, bio, follower, following, repository, location)
+                    val user = DetailUser(login, name, avatar_url, bio, follower, following, repository, location, github_url)
                     user.location?.let { Log.d(TAG, it) }
 
                     detailUser.postValue(user)
