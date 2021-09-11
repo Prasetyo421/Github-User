@@ -4,20 +4,24 @@ import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.didi.githubuser.ViewModel.SearchUserViewModel
 import com.didi.githubuser.activity.DetailUserActivity
 import com.didi.githubuser.adapter.SearchUserAdapter
 import com.didi.githubuser.databinding.ActivityMainBinding
+import com.didi.githubuser.databinding.ListUserBinding
 import com.didi.githubuser.model.SearchUser
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -65,6 +69,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 move.putExtra("username", data.login)
                 startActivity(move)
             }
+        })
+
+        adapter.setOnBtnGithubClickCallback(object : SearchUserAdapter.OnBtnGithubClickCallback{
+            override fun onBtnGithubClickCallback(data: SearchUser) {
+                val url = data.html_url
+                val move = Intent(ACTION_VIEW)
+                move.data = Uri.parse(url)
+                startActivity(move)
+            }
 
         })
 
@@ -86,8 +99,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         })
 
         binding.btnSetting.setOnClickListener(this)
-        val tvGithub: TextView = findViewById(R.id.tv_url_html)
-        tvGithub.setOnClickListener(this)
     }
 
     private fun showNotFound(state: Boolean){
@@ -123,9 +134,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Intent(Settings.ACTION_LOCALE_SETTINGS).also { startActivity(it) }
             }
             R.id.tv_url_html -> {
-                val url = findViewById<TextView>(R.id.tv_url_html).text.toString()
-                val uri = Uri.parse(url)
-                Intent(Intent.ACTION_VIEW, uri).also { startActivity(it) }
+                Toast.makeText(this, "click link gothub", Toast.LENGTH_SHORT).show()
+//                val url = findViewById<TextView>(R.id.tv_url_html).text.toString()
+//                val uri = Uri.parse(url)
+//                Intent(Intent.ACTION_VIEW, uri).also { startActivity(it) }
             }
         }
     }

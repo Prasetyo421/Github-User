@@ -56,9 +56,6 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
-    implementation "android.arch.navigation:navigation-ui-ktx:1.0.0"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
@@ -66,6 +63,8 @@ dependencies {
     implementation 'com.loopj.android:android-async-http:1.4.11'
     implementation "androidx.work:work-runtime:2.6.0"
     implementation "com.facebook.shimmer:shimmer:0.5.0"
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

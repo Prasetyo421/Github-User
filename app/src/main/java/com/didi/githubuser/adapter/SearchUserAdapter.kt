@@ -1,6 +1,9 @@
 package com.didi.githubuser.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +14,24 @@ import com.didi.githubuser.R
 import com.didi.githubuser.model.SearchUser
 import com.didi.githubuser.databinding.ListUserBinding
 import android.text.style.UnderlineSpan
-
 import android.text.SpannableString
-
-
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
+import com.didi.githubuser.activity.DetailUserActivity
 
 
 class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHolder>() {
     private val mData = ArrayList<SearchUser>()
     private var onItemClicCallback: OnItemClickCallback? = null
+    private var onBtnGithubClickCallback: OnBtnGithubClickCallback? = null
+
+    fun setOnBtnGithubClickCallback(onBtnGithubClickCallback: OnBtnGithubClickCallback) {
+        this.onBtnGithubClickCallback = onBtnGithubClickCallback
+    }
+
+    interface OnBtnGithubClickCallback {
+        fun onBtnGithubClickCallback(data: SearchUser)
+    }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
         this.onItemClicCallback = onItemClickCallback
@@ -52,6 +64,9 @@ class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHo
                     .into(binding.image)
                 itemView.setOnClickListener{
                     onItemClicCallback?.onItemClicked(searchUser)
+                }
+                binding.tvUrlHtml.setOnClickListener {
+                    onBtnGithubClickCallback?.onBtnGithubClickCallback(searchUser)
                 }
             }
         }
