@@ -20,7 +20,7 @@ import com.didi.githubuser.model.ListUser
 
 class FollowFragment : Fragment() {
     private var _binding: FragmentFollowBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding as FragmentFollowBinding
 
     companion object {
         private const val ARG_SECTION_NUMBER = "section_number"

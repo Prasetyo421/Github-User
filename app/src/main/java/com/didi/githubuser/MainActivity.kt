@@ -1,6 +1,5 @@
 package com.didi.githubuser
 
-import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var searchUserViewModel: SearchUserViewModel
     private lateinit var adapter: SearchUserAdapter
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -47,7 +45,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         })
 
         adapter = SearchUserAdapter()
-        adapter.notifyDataSetChanged()
 
         binding.rvSearchUser.layoutManager = LinearLayoutManager(this)
         binding.rvSearchUser.adapter = adapter
@@ -55,7 +52,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         adapter.setOnItemClickCallback(object : SearchUserAdapter.OnItemClickCallback{
             override fun onItemClicked(data: ListUser) {
                 val move = Intent(this@MainActivity, DetailUserActivity::class.java)
-                move.putExtra("username", data.login)
+                move.putExtra(USERNAME, data.login)
                 startActivity(move)
             }
         })
@@ -85,7 +82,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
-
         })
 
         binding.btnSetting.setOnClickListener(this)
@@ -131,5 +127,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(this, "click link gothub", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    companion object {
+        const val USERNAME = "username"
     }
 }

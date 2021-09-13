@@ -1,5 +1,8 @@
-<resources>
-    <string name="app_name">Github User</string>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation" >>
+
+    <string name="app_name" >Github User</string>
     <string name="setting_language">setting language</string>
     <string name="username">Username</string>
     <string name="example_link">https://api.github.com/users/Prasetyo421</string>

@@ -7,8 +7,10 @@ import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.didi.githubuser.R
 import com.didi.githubuser.databinding.ListUserBinding
 import com.didi.githubuser.model.ListUser
@@ -46,13 +48,15 @@ class ListUsersAdapter: RecyclerView.Adapter<ListUsersAdapter.ListUsersViewHolde
         fun bind(listUser: ListUser){
             with(itemView){
                 val url = listUser.avatar_url
-                val uri = Uri.parse(url)
+//                val uri = Uri.parse(url)
                 val linkGithub = SpannableString(listUser.html_url)
                 linkGithub.setSpan(UnderlineSpan(), 0, linkGithub.length, 0)
 
-                Glide.with(context)
-                    .load(uri)
-                    .into(binding.image)
+                binding.image.loadImage(url)
+//
+//                Glide.with(context)
+//                    .load(uri)
+//                    .into(binding.image)
                 binding.tvUsername.text = listUser.login
                 binding.tvUrlHtml.text = linkGithub
                 itemView.setOnClickListener{
@@ -80,4 +84,12 @@ class ListUsersAdapter: RecyclerView.Adapter<ListUsersAdapter.ListUsersViewHolde
     }
 
     override fun getItemCount(): Int = mData.size
+
+    fun ImageView.loadImage(url: String){
+        Glide.with(this.context)
+            .load(url)
+            .apply(RequestOptions().override(100, 100))
+            .centerCrop()
+            .into(this)
+    }
 }

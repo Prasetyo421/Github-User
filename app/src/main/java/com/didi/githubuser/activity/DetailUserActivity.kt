@@ -22,16 +22,6 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityDetailUserBinding
     private lateinit var detailUserViewModel: DetailUserViewModel
 
-    companion object {
-        val TAG = DetailUserActivity::class.java.simpleName
-        lateinit var username: String
-        @StringRes
-        private val TAB_TITTLES = intArrayOf(
-            R.string.followers,
-            R.string.following
-        )
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailUserBinding.inflate(layoutInflater)
@@ -39,7 +29,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         showLoading(true)
 
         val bundle: Bundle? = intent.extras
-        var username = bundle?.getString("username")
+        var username = bundle?.getString(MainActivity.USERNAME)
 
         detailUserViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailUserViewModel::class.java)
         if (username != null) {
@@ -51,22 +41,25 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 username = detailUserItem.login
 
                 binding.toolbarTitle.text = username
-                val url = detailUserItem.avatar_url
+                val url = detailUserItem.avatarUrl
                 val uri = Uri.parse(url)
                 Glide.with(this)
                     .load(uri)
                     .into(binding.avatar)
 
-                val name = if (detailUserItem.name != "null"){
-                    detailUserItem.name
-                }else {
-                    detailUserItem.login
-                }
-                val location = if (detailUserItem.location != "null"){
-                    detailUserItem.location
-                }else {
-                    "  "
-                }
+                val name = detailUserItem.name ?: detailUserItem.login
+//                name = if (detailUserItem.name != "null"){
+//                    detailUserItem.name
+//                }else {
+//                    detailUserItem.login
+//                }
+                val location = detailUserItem.location ?: " "
+//                if (detailUserItem.location != "null"){
+//                    detailUserItem.location
+//                }else {
+//                    "  "
+//                }
+
                 val nameLocation = "$name, $location"
                 binding.tvName.text = nameLocation
                 binding.bio.text = detailUserItem.bio
@@ -113,6 +106,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
             R.id.back -> {
                 Toast.makeText(this, "click back", Toast.LENGTH_SHORT).show()
                 Intent(this, MainActivity::class.java).also { startActivity(it) }
+                finish()
             }
             R.id.tv_title -> {
                 Toast.makeText(this, "click title", Toast.LENGTH_SHORT).show()
@@ -127,5 +121,14 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         }else {
             binding.shimmerDetailUser.visibility = View.GONE
         }
+    }
+
+    companion object {
+        lateinit var username: String
+        @StringRes
+        private val TAB_TITTLES = intArrayOf(
+            R.string.followers,
+            R.string.following
+        )
     }
 }

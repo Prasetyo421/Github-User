@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class DetailUser(
     val  login: String?,
     val  name: String?,
-    val  avatar_url: String?,
+    val  avatarUrl: String?,
     val  bio: String?,
     val  follower: Int,
     val  following: Int,
