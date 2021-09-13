@@ -1,17 +1,14 @@
 package com.didi.githubuser.ViewModel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.didi.githubuser.BuildConfig.GITHUB_API_KEY
-import com.didi.githubuser.model.SearchUser
+import com.didi.githubuser.model.ListUser
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
-import org.json.JSONArray
 import org.json.JSONObject
-import java.util.*
 import kotlin.collections.ArrayList
 
 class SearchUserViewModel: ViewModel() {
@@ -19,13 +16,13 @@ class SearchUserViewModel: ViewModel() {
         private val TAG = SearchUserViewModel::class.java.simpleName
     }
 
-    val listUsers = MutableLiveData<ArrayList<SearchUser>?>()
+    val listUsers = MutableLiveData<ArrayList<ListUser>?>()
 
     fun setSearchUser(username: String) {
-        val listItems = ArrayList<SearchUser>()
-
+        val listItems = ArrayList<ListUser>()
         val client = AsyncHttpClient()
         val url = "https://api.github.com/search/users?q=$username"
+
         client.addHeader("Authorization", GITHUB_API_KEY)
         client.addHeader("User-Agent", "request")
         client.get(url, object : AsyncHttpResponseHandler() {
@@ -37,10 +34,10 @@ class SearchUserViewModel: ViewModel() {
                 try {
                     val result = String(responseBody)
                     val responseObject = JSONObject(result)
-
                     val list = responseObject.getJSONArray("items")
+
                     Log.d(TAG + " result", result)
-                    Log.d(TAG + " list", list.length().toString())
+
                     if (list.length() != 0){
                         for (i in 0 until list.length()) {
                             val user = list.getJSONObject(i)
@@ -48,13 +45,12 @@ class SearchUserViewModel: ViewModel() {
                             val avatr_url = user.getString("avatar_url")
                             val url_detail = user.getString("url")
                             val html_url = user.getString("html_url")
-                            val userItems = SearchUser(login, avatr_url, url_detail, html_url)
+                            val userItems = ListUser(login, avatr_url, url_detail, html_url)
                             listItems.add(userItems)
                         }
                     }
 
                     listUsers.postValue(listItems)
-                    Log.d(TAG, "setelah post value")
 
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -75,7 +71,7 @@ class SearchUserViewModel: ViewModel() {
         })
     }
 
-    fun getSearchUser(): MutableLiveData<ArrayList<SearchUser>?> {
+    fun getSearchUser(): MutableLiveData<ArrayList<ListUser>?> {
         return listUsers
     }
 

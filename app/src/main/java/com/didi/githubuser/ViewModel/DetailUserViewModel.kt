@@ -1,12 +1,10 @@
 package com.didi.githubuser.ViewModel
 
 import android.util.Log
-import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.didi.githubuser.BuildConfig.GITHUB_API_KEY
-import com.didi.githubuser.R
 import com.didi.githubuser.activity.DetailUserActivity
 import com.didi.githubuser.model.DetailUser
 import com.loopj.android.http.AsyncHttpClient
@@ -35,9 +33,7 @@ class DetailUserViewModel: ViewModel() {
             ) {
                 try {
                     val result = String(responseBody)
-                    Log.d(TAG, result)
                     val responseObject = JSONObject(result)
-                    Log.d(TAG, responseObject.getString("login"))
                     val login = responseObject.getString("login")
                     val avatar_url = responseObject.getString("avatar_url")
                     val bio = responseObject.getString("bio")
@@ -47,8 +43,10 @@ class DetailUserViewModel: ViewModel() {
                     val following = responseObject.getInt("following")
                     val repository = responseObject.getInt("public_repos")
                     val github_url = responseObject.getString("html_url")
+                    val company = responseObject.getString("company")
+                    val email = responseObject.getString("email")
 
-                    val user = DetailUser(login, name, avatar_url, bio, follower, following, repository, location, github_url)
+                    val user = DetailUser(login, name, avatar_url, bio, follower, following, repository, location, github_url, company, email)
                     user.location?.let { Log.d(TAG, it) }
 
                     detailUser.postValue(user)

@@ -1,9 +1,6 @@
 package com.didi.githubuser.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -11,17 +8,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.didi.githubuser.R
-import com.didi.githubuser.model.SearchUser
 import com.didi.githubuser.databinding.ListUserBinding
 import android.text.style.UnderlineSpan
 import android.text.SpannableString
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
-import com.didi.githubuser.activity.DetailUserActivity
+import com.didi.githubuser.model.ListUser
 
 
 class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHolder>() {
-    private val mData = ArrayList<SearchUser>()
+    private val mData = ArrayList<ListUser>()
     private var onItemClicCallback: OnItemClickCallback? = null
     private var onBtnGithubClickCallback: OnBtnGithubClickCallback? = null
 
@@ -30,7 +24,7 @@ class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHo
     }
 
     interface OnBtnGithubClickCallback {
-        fun onBtnGithubClickCallback(data: SearchUser)
+        fun onBtnGithubClickCallback(data: ListUser)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
@@ -38,11 +32,11 @@ class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHo
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: SearchUser)
+        fun onItemClicked(data: ListUser)
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(item: ArrayList<SearchUser>){
+    fun setData(item: ArrayList<ListUser>){
         mData.clear()
         mData.addAll(item)
         notifyDataSetChanged()
@@ -50,7 +44,7 @@ class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHo
 
     inner class SearchUserViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val binding = ListUserBinding.bind(itemView)
-        fun bind(searchUser: SearchUser){
+        fun bind(searchUser: ListUser){
             with(itemView){
                 binding.tvUsername.text = searchUser.login
                 val linkGithub = SpannableString(searchUser.html_url)

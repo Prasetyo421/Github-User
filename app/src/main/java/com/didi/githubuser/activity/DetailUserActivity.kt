@@ -1,34 +1,26 @@
 package com.didi.githubuser.activity
 
+import android.content.Intent
 import android.net.Uri
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
-import androidx.room.RoomDatabase
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.didi.githubuser.R
 import com.didi.githubuser.ViewModel.DetailUserViewModel
-import com.didi.githubuser.database.AppDatabase
-import com.didi.githubuser.database.User
 import com.didi.githubuser.databinding.ActivityDetailUserBinding
 import com.didi.githubuser.helper.SectionsPagerAdapter
 import com.didi.githubuser.helper.ZoomOutPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
 import android.widget.Toast
-
 import com.didi.githubuser.MainActivity
 
-class DetailUserActivity : AppCompatActivity() {
+class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityDetailUserBinding
     private lateinit var detailUserViewModel: DetailUserViewModel
-//    private lateinit var database: AppDatabase
-    private lateinit var user: User
 
     companion object {
         val TAG = DetailUserActivity::class.java.simpleName
@@ -44,7 +36,7 @@ class DetailUserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val db = AppDatabase.createDatabase(this)
+        showLoading(true)
 
         val bundle: Bundle? = intent.extras
         var username = bundle?.getString("username")
@@ -55,33 +47,51 @@ class DetailUserActivity : AppCompatActivity() {
         }
         detailUserViewModel.getDetailUser().observe(this, { detailUserItem ->
             if (detailUserItem != null){
-                Log.d("test", "berhasil mengambil data detail user")
-
+                showLoading(false)
                 username = detailUserItem.login
 
-                binding.collapsingToolbar.title = username
-
+                binding.toolbarTitle.text = username
                 val url = detailUserItem.avatar_url
                 val uri = Uri.parse(url)
                 Glide.with(this)
                     .load(uri)
                     .into(binding.avatar)
 
-                binding.tvName.text = "${detailUserItem.name}, ${detailUserItem.location}"
-                if (detailUserItem.bio != "null"){
-                    binding.tvInfo.text = detailUserItem.bio
+                val name = if (detailUserItem.name != "null"){
+                    detailUserItem.name
                 }else {
-                    binding.tvInfo.visibility = View.GONE
+                    detailUserItem.login
+                }
+                val location = if (detailUserItem.location != "null"){
+                    detailUserItem.location
+                }else {
+                    "  "
+                }
+                val nameLocation = "$name, $location"
+                binding.tvName.text = nameLocation
+                binding.bio.text = detailUserItem.bio
+                binding.company.text = detailUserItem.company
+                binding.email.text = detailUserItem.email
+                if (detailUserItem.bio != "null"){
+                    binding.bio.text = detailUserItem.bio
+                }else {
+                    binding.bio.visibility = View.GONE
+                }
+                if (detailUserItem.company != "null"){
+                    binding.company.text = detailUserItem.company
+                }else {
+                    binding.company.visibility = View.GONE
+                }
+                if (detailUserItem.email != "null"){
+                    binding.email.text = detailUserItem.email
+                }else {
+                    binding.email.visibility = View.GONE
                 }
 
-                Log.d("test", detailUserItem.follower.toString())
                 binding.tvJmlhFollowers.text = detailUserItem.follower.toString()
                 binding.tvJmlhFollowing.text = detailUserItem.following.toString()
                 binding.tvJmlhRepositories.text = detailUserItem.repository.toString()
 
-                user = User(detailUserItem.login, detailUserItem.avatar_url, detailUserItem.github_url)
-            }else {
-                Log.d("test", "gagal mengambil data detail user")
             }
         })
 
@@ -94,24 +104,28 @@ class DetailUserActivity : AppCompatActivity() {
             tab.text = resources.getString(TAB_TITTLES[position])
         }.attach()
 
-        binding.fab.setOnClickListener {
-//            insertData(user)
-            Log.d("test", "click fab")
-//            db?.userDao()?.insertAll(user)
-//            db?.userDao()?.getAll()?.forEach{
-//                Log.d("test", "username: ${it.username}")
-//            }
+        binding.back.setOnClickListener(this)
+        binding.toolbarTitle.setOnClickListener(this)
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.back -> {
+                Toast.makeText(this, "click back", Toast.LENGTH_SHORT).show()
+                Intent(this, MainActivity::class.java).also { startActivity(it) }
+            }
+            R.id.tv_title -> {
+                Toast.makeText(this, "click title", Toast.LENGTH_SHORT).show()
+
+            }
         }
     }
 
-//    private fun insertData(user: User){
-//        val thread = Thread{
-//            database.userDao().insertAll(user)
-//
-//            database.userDao().getAll().forEach(){
-//                Log.d("test", "username: ${it.username}")
-//            }
-//        }
-//        thread.start()
-//    }
+    private fun showLoading(state: Boolean){
+        if (state){
+            binding.shimmerDetailUser.visibility = View.VISIBLE
+        }else {
+            binding.shimmerDetailUser.visibility = View.GONE
+        }
+    }
 }

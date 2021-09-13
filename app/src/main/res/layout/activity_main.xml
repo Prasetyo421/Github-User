@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,47 +8,36 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:background="@color/black"
-        android:minHeight="?attr/actionBarSize"
-        android:padding="16dp">
+        android:minHeight="?attr/actionBarSize">
 
-        <RelativeLayout
-            android:id="@+id/relativLayout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
 
-            <LinearLayout
-                android:layout_width="300dp"
+            <SearchView
+                android:id="@+id/search_users"
+                android:layout_width="200dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="end"
                 android:background="@drawable/bg_search"
-                android:orientation="vertical"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp">
+                android:queryHint="username"
+                android:searchIcon="@drawable/ic_baseline_person_search_24" />
 
-                <SearchView
-                    android:id="@+id/search_users"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:queryHint="username"
-                    android:layout_gravity="end"
-                    android:searchHintIcon="@drawable/ic_baseline_person_search_24"
-                    android:searchIcon="@drawable/ic_baseline_person_search_24" />
-
-            </LinearLayout>
-
-            <ImageButton
+            <ImageView
                 android:id="@+id/btn_setting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_baseline_settings_24"
+                android:layout_marginTop="-5dp"
                 android:layout_marginStart="20dp"
-                android:contentDescription="@string/setting_language"
-                android:background="@drawable/ic_baseline_settings_24"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"/>
+                android:contentDescription="@string/setting_language" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -65,11 +53,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/shimmer_search_user_item"/>
-            <include layout="@layout/shimmer_search_user_item"/>
-            <include layout="@layout/shimmer_search_user_item"/>
-            <include layout="@layout/shimmer_search_user_item"/>
-            <include layout="@layout/shimmer_search_user_item"/>
+            <include layout="@layout/shimmer_list_user_item"/>
+            <include layout="@layout/shimmer_list_user_item"/>
+            <include layout="@layout/shimmer_list_user_item"/>
+            <include layout="@layout/shimmer_list_user_item"/>
+            <include layout="@layout/shimmer_list_user_item"/>
 
         </LinearLayout>
 

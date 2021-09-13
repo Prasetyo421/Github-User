@@ -4,9 +4,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.didi.githubuser.fragment.FollowersFragment
-import com.didi.githubuser.fragment.FollowingFragment
-import com.didi.githubuser.fragment.HomeFragment
+import com.didi.githubuser.fragment.FollowFragment
 
 class SectionsPagerAdapter(activity: AppCompatActivity, username: String ): FragmentStateAdapter(activity) {
     private val name = username
@@ -14,6 +12,6 @@ class SectionsPagerAdapter(activity: AppCompatActivity, username: String ): Frag
 
     override fun createFragment(position: Int): Fragment {
         Log.d("section", name)
-        return HomeFragment.newInstance(position, name)
+        return FollowFragment.newInstance(position, name)
     }
 }

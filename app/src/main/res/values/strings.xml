@@ -12,4 +12,7 @@
     <string name="repositories">repositories</string>
     <string name="home">Home</string>
     <string name="username_not_found">username not found</string>
+    <string name="favorite">favorite</string>
+    <string name="back_button">back button</string>
+    <string name="empty">empty</string>
 </resources>
