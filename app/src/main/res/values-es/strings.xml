@@ -2,7 +2,6 @@
 <resources>
     <string name="setting_language">atur bahasa</string>
     <string name="username">nombre de usuario</string>
-    <string name="detail">detalle</string>
     <string name="followers">seguidoras</string>
     <string name="following">siguiente</string>
     <string name="repositories">repositorios</string>

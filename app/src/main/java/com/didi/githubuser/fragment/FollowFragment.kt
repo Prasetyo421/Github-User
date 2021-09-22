@@ -53,6 +53,7 @@ class FollowFragment : Fragment() {
             val size = listUserItems.size
             if (size != 0){
                 adapter.setData(listUserItems)
+                showList(true)
             }else {
                 Log.d("test", "show empty")
                 showEmpty(true)
@@ -91,12 +92,23 @@ class FollowFragment : Fragment() {
                 listUsersViewModel.setListUser("following", username)
             }
         }
+    }
 
+    private fun showList(state: Boolean){
+        if (state){
+            binding.rvListUser.visibility = View.VISIBLE
+            binding.imgEmpty.visibility = View.GONE
+            binding.shimmer.visibility = View.GONE
+        }else {
+            binding.rvListUser.visibility = View.GONE
+        }
     }
 
     private fun showLoading(state: Boolean){
         if (state){
             binding.shimmer.visibility = View.VISIBLE
+            binding.imgEmpty.visibility = View.GONE
+            binding.rvListUser.visibility = View.GONE
         }else {
             binding.shimmer.visibility = View.GONE
         }
@@ -104,9 +116,11 @@ class FollowFragment : Fragment() {
 
     private fun showEmpty(state: Boolean){
         if (state){
-            binding.imgUserNotFound.visibility = View.VISIBLE
+            binding.imgEmpty.visibility = View.VISIBLE
+            binding.rvListUser.visibility = View.GONE
+            binding.shimmer.visibility = View.GONE
         }else {
-            binding.imgUserNotFound.visibility = View.GONE
+            binding.imgEmpty.visibility = View.GONE
         }
     }
 

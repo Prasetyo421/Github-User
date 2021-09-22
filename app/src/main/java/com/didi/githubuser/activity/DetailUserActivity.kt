@@ -1,6 +1,5 @@
 package com.didi.githubuser.activity
 
-import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,8 +14,10 @@ import com.didi.githubuser.databinding.ActivityDetailUserBinding
 import com.didi.githubuser.helper.SectionsPagerAdapter
 import com.didi.githubuser.helper.ZoomOutPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.didi.githubuser.MainActivity
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 
 class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityDetailUserBinding
@@ -40,7 +41,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 showLoading(false)
                 username = detailUserItem.login
 
-                binding.toolbarTitle.text = username
+//                binding.toolbarTitle.text = username
                 val url = detailUserItem.avatarUrl
                 val uri = Uri.parse(url)
                 Glide.with(this)
@@ -48,37 +49,27 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                     .into(binding.avatar)
 
                 val name = detailUserItem.name ?: detailUserItem.login
-//                name = if (detailUserItem.name != "null"){
-//                    detailUserItem.name
-//                }else {
-//                    detailUserItem.login
-//                }
                 val location = detailUserItem.location ?: " "
-//                if (detailUserItem.location != "null"){
-//                    detailUserItem.location
-//                }else {
-//                    "  "
-//                }
 
                 val nameLocation = "$name, $location"
                 binding.tvName.text = nameLocation
-                binding.bio.text = detailUserItem.bio
-                binding.company.text = detailUserItem.company
-                binding.email.text = detailUserItem.email
+                binding.tvBio.text = detailUserItem.bio
+                binding.tvCompany.text = detailUserItem.company
+                binding.tvEmail.text = detailUserItem.email
                 if (detailUserItem.bio != "null"){
-                    binding.bio.text = detailUserItem.bio
+                    binding.tvBio.text = detailUserItem.bio
                 }else {
-                    binding.bio.visibility = View.GONE
+                    binding.tvBio.visibility = View.GONE
                 }
                 if (detailUserItem.company != "null"){
-                    binding.company.text = detailUserItem.company
+                    binding.tvCompany.text = detailUserItem.company
                 }else {
-                    binding.company.visibility = View.GONE
+                    binding.tvCompany.visibility = View.GONE
                 }
                 if (detailUserItem.email != "null"){
-                    binding.email.text = detailUserItem.email
+                    binding.tvEmail.text = detailUserItem.email
                 }else {
-                    binding.email.visibility = View.GONE
+                    binding.tvEmail.visibility = View.GONE
                 }
 
                 binding.tvJmlhFollowers.text = detailUserItem.follower.toString()
@@ -97,22 +88,50 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
             tab.text = resources.getString(TAB_TITTLES[position])
         }.attach()
 
-        binding.back.setOnClickListener(this)
-        binding.toolbarTitle.setOnClickListener(this)
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(false)
+        initCollapsingToolbar(username as String)
+//        binding.collapsingToolbarLayout.title = username
+        binding.collapsingToolbarLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGrey))
+        binding.collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white))
     }
 
     override fun onClick(v: View?) {
         when(v?.id){
-            R.id.back -> {
-                Toast.makeText(this, "click back", Toast.LENGTH_SHORT).show()
-                Intent(this, MainActivity::class.java).also { startActivity(it) }
-                finish()
-            }
-            R.id.tv_title -> {
-                Toast.makeText(this, "click title", Toast.LENGTH_SHORT).show()
-
-            }
+//            R.id.back -> {
+//                Toast.makeText(this, "click back", Toast.LENGTH_SHORT).show()
+//                Intent(this, MainActivity::class.java).also { startActivity(it) }
+//                finish()
+//            }
+//            R.id.toolbarTitle -> {
+//                Toast.makeText(this, "click title", Toast.LENGTH_SHORT).show()
+//
+//            }
         }
+    }
+
+    private fun initCollapsingToolbar(tittle: String) {
+        val collapsingToolbar = binding.collapsingToolbarLayout
+        collapsingToolbar.title = " "
+        val appBarLayout = binding.appBar
+        appBarLayout.setExpanded(true)
+        appBarLayout.addOnOffsetChangedListener(object : OnOffsetChangedListener {
+            var isShow = false
+            var scrollRange = -1
+            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.totalScrollRange
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbar.title = tittle
+                    isShow = true
+                } else if (isShow) {
+                    collapsingToolbar.title = " "
+                    isShow = false
+                }
+            }
+        })
     }
 
     private fun showLoading(state: Boolean){
@@ -121,6 +140,15 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         }else {
             binding.shimmerDetailUser.visibility = View.GONE
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 
     companion object {

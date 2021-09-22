@@ -14,7 +14,7 @@ import java.lang.Exception
 
 class ListUsersViewModel: ViewModel() {
     companion object {
-        val TAG = ListUsersViewModel::class.java.simpleName
+        private val TAG = ListUsersViewModel::class.java.simpleName
     }
 
     val listUsers = MutableLiveData<ArrayList<ListUser>>()
@@ -46,10 +46,10 @@ class ListUsersViewModel: ViewModel() {
                     for (i in 0 until list.length()) {
                         val user = list.getJSONObject(i)
                         val login = user.getString("login")
-                        val avatr_url = user.getString("avatar_url")
+                        val avatar_url = user.getString("avatar_url")
                         val url_detail = user.getString("url")
                         val html_url = user.getString("html_url")
-                        val userItems = ListUser(login, avatr_url, url_detail, html_url)
+                        val userItems = ListUser(login, avatar_url, url_detail, html_url)
                         listItems.add(userItems)
                     }
 

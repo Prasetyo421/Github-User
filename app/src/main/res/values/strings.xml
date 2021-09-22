@@ -1,21 +1,16 @@
-<resources
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation" >>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">>
 
-    <string name="app_name" >Github User</string>
+    <string name="app_name">Github User</string>
     <string name="setting_language">setting language</string>
     <string name="username">Username</string>
-    <string name="example_link">https://api.github.com/users/Prasetyo421</string>
-    <string name="detail">detail</string>
     <string name="github">github</string>
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="repositories">repositories</string>
-    <string name="home">Home</string>
     <string name="username_not_found">username not found</string>
-    <string name="favorite">favorite</string>
     <string name="back_button">back button</string>
     <string name="empty">empty</string>
+    <string name="setting">setting</string>
+    <string name="favorite">favorite</string>
 </resources>

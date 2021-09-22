@@ -8,6 +8,8 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
@@ -15,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.didi.githubuser.ViewModel.SearchUserViewModel
 import com.didi.githubuser.activity.DetailUserActivity
+import com.didi.githubuser.activity.FavoriteActivity
 import com.didi.githubuser.adapter.SearchUserAdapter
 import com.didi.githubuser.databinding.ActivityMainBinding
 import com.didi.githubuser.model.ListUser
@@ -67,7 +70,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         })
 
-
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         binding.searchUsers.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         binding.searchUsers.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -84,7 +86,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         })
 
-        binding.btnSetting.setOnClickListener(this)
+        setSupportActionBar(binding.toolbar)
+
     }
 
     private fun showNotFound(state: Boolean){
@@ -120,16 +123,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when(v?.id){
-            R.id.btn_setting -> {
-                Intent(Settings.ACTION_LOCALE_SETTINGS).also { startActivity(it) }
-            }
             R.id.tv_url_html -> {
-                Toast.makeText(this, "click link gothub", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "click link github", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_setting, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Toast.makeText(this, "click item", Toast.LENGTH_SHORT).show()
+        when(item.itemId){
+            R.id.favorite -> Toast.makeText(this, "click favorite", Toast.LENGTH_SHORT).show()
+            R.id.setting -> Toast.makeText(this, "click setting", Toast.LENGTH_SHORT).show()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {
         const val USERNAME = "username"
     }
+
 }

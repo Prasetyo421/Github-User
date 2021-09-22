@@ -15,7 +15,7 @@ import java.lang.Exception
 
 class DetailUserViewModel: ViewModel() {
     companion object {
-        val TAG = DetailUserActivity::class.java.simpleName
+        private val TAG = DetailUserActivity::class.java.simpleName
     }
 
     private var detailUser = MutableLiveData<DetailUser>()
