@@ -47,15 +47,10 @@ class ListUsersAdapter: RecyclerView.Adapter<ListUsersAdapter.ListUsersViewHolde
         fun bind(listUser: ListUser){
             with(itemView){
                 val url = listUser.avatarUrl
-//                val uri = Uri.parse(url)
                 val linkGithub = SpannableString(listUser.htmlUrl)
                 linkGithub.setSpan(UnderlineSpan(), 0, linkGithub.length, 0)
 
                 binding.image.loadImage(url)
-//
-//                Glide.with(context)
-//                    .load(uri)
-//                    .into(binding.image)
                 binding.tvUsername.text = listUser.login
                 binding.tvUrlHtml.text = linkGithub
                 itemView.setOnClickListener{

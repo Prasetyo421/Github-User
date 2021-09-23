@@ -3,6 +3,7 @@ package com.didi.githubuser.activity
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -17,15 +18,28 @@ import com.didi.githubuser.helper.ZoomOutPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
 import androidx.core.content.ContextCompat
 import com.didi.githubuser.MainActivity
-import com.didi.githubuser.ViewModel.UserAddUpdateViewModel
+import com.didi.githubuser.ViewModel.FavoriteAddUpdateViewModel
 import com.didi.githubuser.ViewModel.ViewModelFactory
+import com.didi.githubuser.database.User
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 
 class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityDetailUserBinding
     private lateinit var detailUserViewModel: DetailUserViewModel
-    private lateinit var userAddUpdateViewModel: UserAddUpdateViewModel
+    private lateinit var userAddUpdateViewModel: FavoriteAddUpdateViewModel
+    private lateinit var detailUser: User
+    private lateinit var listFavorite: List<User>
+    private var isFavorite: Boolean = false
+    lateinit var username: String
+
+    companion object {
+        @StringRes
+        private val TAB_TITTLES = intArrayOf(
+            R.string.followers,
+            R.string.following
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,26 +48,27 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         showLoading(true)
 
         val bundle: Bundle? = intent.extras
-        var username = bundle?.getString(MainActivity.USERNAME)
+        username = bundle?.getString(MainActivity.USERNAME) as String
 
         detailUserViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailUserViewModel::class.java)
-        if (username != null) {
-            detailUserViewModel.setDetailUser(username)
-        }
-        detailUserViewModel.getDetailUser().observe(this, { detailUserItem ->
+        setUser(username)
+
+        detailUserViewModel.detailUser.observe(this, { detailUserItem ->
             if (detailUserItem != null){
                 showLoading(false)
-                username = detailUserItem.login
+//                username = detailUserItem.login
+                detailUser = User(login = detailUserItem.login,
+                avatarUrl = detailUserItem.avatarUrl,
+                url = detailUserItem.url, htmlUrl = detailUserItem.htmlUrl)
 
-//                binding.toolbarTitle.text = username
                 val url = detailUserItem.avatarUrl
                 val uri = Uri.parse(url)
                 Glide.with(this)
                     .load(uri)
                     .into(binding.avatar)
 
-                val name = detailUserItem.name ?: detailUserItem.login
-                val location = detailUserItem.location ?: " "
+                val name = detailUserItem.name
+                val location = detailUserItem.location
 
                 val nameLocation = "$name, $location"
                 binding.tvName.text = nameLocation
@@ -76,16 +91,16 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                     binding.tvEmail.visibility = View.GONE
                 }
 
-                binding.tvJmlhFollowers.text = detailUserItem.follower.toString()
+                binding.tvJmlhFollowers.text = detailUserItem.followers.toString()
                 binding.tvJmlhFollowing.text = detailUserItem.following.toString()
-                binding.tvJmlhRepositories.text = detailUserItem.repository.toString()
-
+                binding.tvJmlhRepositories.text = detailUserItem.publicRepos.toString()
             }
         })
 
+
         userAddUpdateViewModel = obtainViewModel(this)
 
-        val sectionsPagerAdapter = username?.let { SectionsPagerAdapter(this, it) }
+        val sectionsPagerAdapter = username.let { SectionsPagerAdapter(this, it) }
         val viewPager: ViewPager2 = binding.viewPager
         viewPager.setPageTransformer(ZoomOutPageTransformer())
         viewPager.adapter = sectionsPagerAdapter
@@ -101,28 +116,43 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         binding.collapsingToolbarLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGrey))
         binding.collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white))
         binding.fabAdd.setOnClickListener(this)
+
+        userAddUpdateViewModel.getAllUser().observe(this, {
+                listUser ->
+            listFavorite = listUser
+            Log.d("test", "isFavorite1: $isFavorite")
+            listFavorite.forEach {
+                if (it.login.equals(username)){
+                    isFavorite = true
+                }
+            }
+            Log.d("test", "isFavorit2: $isFavorite")
+            if (isFavorite){
+                binding.fabAdd.setImageResource(R.drawable.bg_search)
+            }
+        })
+
     }
 
-    private fun obtainViewModel(activity: AppCompatActivity): UserAddUpdateViewModel {
+    private fun obtainViewModel(activity: AppCompatActivity): FavoriteAddUpdateViewModel {
         val factory = ViewModelFactory.getInstance(activity.application)
-        return ViewModelProvider(activity, factory).get(UserAddUpdateViewModel::class.java)
+        return ViewModelProvider(activity, factory).get(FavoriteAddUpdateViewModel::class.java)
     }
 
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.fab_add -> {
                 Toast.makeText(this, "fab click", Toast.LENGTH_SHORT).show()
-
+                if (!isFavorite){
+                    userAddUpdateViewModel.insert(detailUser)
+                    binding.fabAdd.setImageResource(R.drawable.bg_search)
+                }else {
+                    Log.d("test", "delete: username $username")
+                    userAddUpdateViewModel.deleteByUsername(username)
+//                    userAddUpdateViewModel.delete(detailUser as User)
+                    binding.fabAdd.setImageResource(R.drawable.ic_baseline_favorite_24)
+                }
             }
-//            R.id.back -> {
-//                Toast.makeText(this, "click back", Toast.LENGTH_SHORT).show()
-//                Intent(this, MainActivity::class.java).also { startActivity(it) }
-//                finish()
-//            }
-//            R.id.toolbarTitle -> {
-//                Toast.makeText(this, "click title", Toast.LENGTH_SHORT).show()
-//
-//            }
         }
     }
 
@@ -149,6 +179,12 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         })
     }
 
+    private fun setUser(username: String?){
+        if (username != null){
+            detailUserViewModel.setDetailUser(username)
+        }
+    }
+
     private fun showLoading(state: Boolean){
         if (state){
             binding.shimmerDetailUser.visibility = View.VISIBLE
@@ -164,14 +200,5 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onBackPressed() {
         super.onBackPressed()
-    }
-
-    companion object {
-        lateinit var username: String
-        @StringRes
-        private val TAB_TITTLES = intArrayOf(
-            R.string.followers,
-            R.string.following
-        )
     }
 }

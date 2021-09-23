@@ -8,10 +8,11 @@ import com.didi.githubuser.BuildConfig.GITHUB_API_KEY
 import com.didi.githubuser.model.ResponseFollow
 
 interface ApiService {
-    @GET("user/{username}")
+    @Headers("Authorization: $GITHUB_API_KEY")
+    @GET("users/{username}")
     fun getDetailUser(
         @Path("username") username: String
-    ): Call<List<ResponseDetailUser>>
+    ): Call<ResponseDetailUser>
 
     @Headers("Authorization: $GITHUB_API_KEY")
     @GET("search/users")

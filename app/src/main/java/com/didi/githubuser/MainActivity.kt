@@ -27,6 +27,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var searchUserViewModel: SearchUserViewModel
     private lateinit var adapter: SearchUserAdapter
 
+    companion object {
+        const val USERNAME = "username"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -155,10 +159,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    companion object {
-        const val USERNAME = "username"
     }
 
 }

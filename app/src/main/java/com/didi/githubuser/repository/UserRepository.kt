@@ -31,4 +31,8 @@ class UserRepository(application: Application) {
     fun delete(user: User){
         executorService.execute { mUserDao.delete(user) }
     }
+
+    fun deleteByUsername(username: String){
+        executorService.execute { mUserDao.deleteByusername(username) }
+    }
 }
