@@ -1,7 +1,6 @@
 package com.didi.githubuser.adapter
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
@@ -47,9 +46,9 @@ class ListUsersAdapter: RecyclerView.Adapter<ListUsersAdapter.ListUsersViewHolde
         private val binding = ListUserBinding.bind(itemView)
         fun bind(listUser: ListUser){
             with(itemView){
-                val url = listUser.avatar_url
+                val url = listUser.avatarUrl
 //                val uri = Uri.parse(url)
-                val linkGithub = SpannableString(listUser.html_url)
+                val linkGithub = SpannableString(listUser.htmlUrl)
                 linkGithub.setSpan(UnderlineSpan(), 0, linkGithub.length, 0)
 
                 binding.image.loadImage(url)

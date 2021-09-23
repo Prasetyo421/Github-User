@@ -71,7 +71,7 @@ class FollowFragment : Fragment() {
         })
         adapter.setOnBtnGithubClickCallback(object : ListUsersAdapter.OnBtnGithubClickCallback{
             override fun onItemClicked(data: ListUser) {
-                val url = data.html_url
+                val url = data.htmlUrl
                 val mMove = Intent(ACTION_VIEW)
                 mMove.data = Uri.parse(url)
                 startActivity(mMove)

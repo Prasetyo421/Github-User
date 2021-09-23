@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -16,12 +17,15 @@ import com.didi.githubuser.helper.ZoomOutPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
 import androidx.core.content.ContextCompat
 import com.didi.githubuser.MainActivity
+import com.didi.githubuser.ViewModel.UserAddUpdateViewModel
+import com.didi.githubuser.ViewModel.ViewModelFactory
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 
 class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityDetailUserBinding
     private lateinit var detailUserViewModel: DetailUserViewModel
+    private lateinit var userAddUpdateViewModel: UserAddUpdateViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +83,8 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
             }
         })
 
+        userAddUpdateViewModel = obtainViewModel(this)
+
         val sectionsPagerAdapter = username?.let { SectionsPagerAdapter(this, it) }
         val viewPager: ViewPager2 = binding.viewPager
         viewPager.setPageTransformer(ZoomOutPageTransformer())
@@ -92,13 +98,22 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(false)
         initCollapsingToolbar(username as String)
-//        binding.collapsingToolbarLayout.title = username
         binding.collapsingToolbarLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGrey))
         binding.collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white))
+        binding.fabAdd.setOnClickListener(this)
+    }
+
+    private fun obtainViewModel(activity: AppCompatActivity): UserAddUpdateViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory).get(UserAddUpdateViewModel::class.java)
     }
 
     override fun onClick(v: View?) {
         when(v?.id){
+            R.id.fab_add -> {
+                Toast.makeText(this, "fab click", Toast.LENGTH_SHORT).show()
+
+            }
 //            R.id.back -> {
 //                Toast.makeText(this, "click back", Toast.LENGTH_SHORT).show()
 //                Intent(this, MainActivity::class.java).also { startActivity(it) }

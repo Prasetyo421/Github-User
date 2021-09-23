@@ -11,11 +11,11 @@ import com.didi.githubuser.R
 import com.didi.githubuser.databinding.ListUserBinding
 import android.text.style.UnderlineSpan
 import android.text.SpannableString
-import com.didi.githubuser.model.ListUser
+import com.didi.githubuser.model.ItemsItem
 
 
-class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHolder>() {
-    private val mData = ArrayList<ListUser>()
+class SearchUserAdapter(): RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHolder>() {
+    private var mData = ArrayList<ItemsItem>()
     private var onItemClicCallback: OnItemClickCallback? = null
     private var onBtnGithubClickCallback: OnBtnGithubClickCallback? = null
 
@@ -24,7 +24,7 @@ class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHo
     }
 
     interface OnBtnGithubClickCallback {
-        fun onBtnGithubClickCallback(data: ListUser)
+        fun onBtnGithubClickCallback(data: ItemsItem)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
@@ -32,26 +32,25 @@ class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHo
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListUser)
+        fun onItemClicked(data: ItemsItem)
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(item: ArrayList<ListUser>){
-        mData.clear()
-        mData.addAll(item)
+    fun setData(item: ArrayList<ItemsItem>){
+        mData = item
         notifyDataSetChanged()
     }
 
     inner class SearchUserViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val binding = ListUserBinding.bind(itemView)
-        fun bind(searchUser: ListUser){
+        fun bind(searchUser: ItemsItem){
             with(itemView){
                 binding.tvUsername.text = searchUser.login
-                val linkGithub = SpannableString(searchUser.html_url)
+                val linkGithub = SpannableString(searchUser.htmlUrl)
                 linkGithub.setSpan(UnderlineSpan(), 0, linkGithub.length, 0)
                 binding.tvUrlHtml.text = linkGithub
 
-                val url = searchUser.avatar_url
+                val url = searchUser.avatarUrl
                 val uri = Uri.parse(url)
                 Glide.with(context)
                     .load(uri)

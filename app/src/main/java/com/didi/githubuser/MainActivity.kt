@@ -20,7 +20,7 @@ import com.didi.githubuser.activity.DetailUserActivity
 import com.didi.githubuser.activity.FavoriteActivity
 import com.didi.githubuser.adapter.SearchUserAdapter
 import com.didi.githubuser.databinding.ActivityMainBinding
-import com.didi.githubuser.model.ListUser
+import com.didi.githubuser.model.ItemsItem
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
@@ -34,17 +34,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         searchUserViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(SearchUserViewModel::class.java)
 
-        searchUserViewModel.getSearchUser().observe(this, { searchUserItems ->
-            val size = searchUserItems?.size
-            if (searchUserItems != null && size != 0){
-                adapter.setData(searchUserItems)
-                showLoading(false)
-                showRv(true)
-            }else {
-                showLoading(false)
-                showRv(false)
-                showNotFound(true)
-            }
+        searchUserViewModel.listUsers.observe(this, { itemsItem ->
+            adapter.setData(ArrayList(itemsItem))
+        })
+
+//        searchUserViewModel.getSearchUser().observe(this, { searchUserItems ->
+//            val size = searchUserItems?.size
+//            if (searchUserItems != null && size != 0){
+//                adapter.setData(searchUserItems)
+//                showLoading(false)
+//                showRv(true)
+//            }else {
+//                showLoading(false)
+//                showRv(false)
+//                showNotFound(true)
+//            }
+//        })
+
+        searchUserViewModel.isLoading.observe(this, { state ->
+            showLoading(state)
         })
 
         adapter = SearchUserAdapter()
@@ -53,7 +61,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.rvSearchUser.adapter = adapter
 
         adapter.setOnItemClickCallback(object : SearchUserAdapter.OnItemClickCallback{
-            override fun onItemClicked(data: ListUser) {
+            override fun onItemClicked(data: ItemsItem) {
                 val move = Intent(this@MainActivity, DetailUserActivity::class.java)
                 move.putExtra(USERNAME, data.login)
                 startActivity(move)
@@ -61,8 +69,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         })
 
         adapter.setOnBtnGithubClickCallback(object : SearchUserAdapter.OnBtnGithubClickCallback{
-            override fun onBtnGithubClickCallback(data: ListUser) {
-                val url = data.html_url
+            override fun onBtnGithubClickCallback(data: ItemsItem) {
+                val url = data.htmlUrl
                 val move = Intent(ACTION_VIEW)
                 move.data = Uri.parse(url)
                 startActivity(move)
@@ -76,7 +84,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query?.isEmpty() == false){
                     showLoading(true)
-                    searchUserViewModel.setSearchUser(query)
+                    searchUserViewModel.searchUsers(query)
                 }
                 return true
             }
@@ -137,8 +145,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Toast.makeText(this, "click item", Toast.LENGTH_SHORT).show()
         when(item.itemId){
-            R.id.favorite -> Toast.makeText(this, "click favorite", Toast.LENGTH_SHORT).show()
-            R.id.setting -> Toast.makeText(this, "click setting", Toast.LENGTH_SHORT).show()
+            R.id.favorite -> {
+                Toast.makeText(this, "click favorite", Toast.LENGTH_SHORT).show()
+                Intent(this, FavoriteActivity::class.java).also { startActivity(it) }
+            }
+            R.id.setting -> {
+                Toast.makeText(this, "click setting", Toast.LENGTH_SHORT).show()
+                Intent(Settings.ACTION_LOCALE_SETTINGS).also { startActivity(it) }
+            }
         }
         return super.onOptionsItemSelected(item)
     }
