@@ -14,4 +14,11 @@
     <string name="setting">setting</string>
     <string name="favorite">favorite</string>
     <string name="add_user">add user to favorite</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="enter_name">Enter name</string>
+    <string name="icon_setting">icon setting</string>
+    <string name="selamat_datang">Selamat datang</string>
+    <string name="my_name">Didi Prasetyo</string>
+    <string name="setting_name">setting name</string>
+    <string name="daftar_user_github_favorite">Daftar user github favorite</string>
 </resources>

@@ -7,28 +7,37 @@ import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.didi.githubuser.ViewModel.SearchUserViewModel
+import com.didi.githubuser.ViewModel.SettingViewModel
+import com.didi.githubuser.ViewModel.ViewModelFactorySetting
 import com.didi.githubuser.activity.DetailUserActivity
 import com.didi.githubuser.activity.FavoriteActivity
+import com.didi.githubuser.activity.SettingActivity
 import com.didi.githubuser.adapter.SearchUserAdapter
 import com.didi.githubuser.databinding.ActivityMainBinding
+import com.didi.githubuser.helper.SettingPreferences
 import com.didi.githubuser.model.ItemsItem
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var searchUserViewModel: SearchUserViewModel
     private lateinit var adapter: SearchUserAdapter
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
 
     companion object {
         const val USERNAME = "username"
+        const val TEST = "test"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,24 +45,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        showNotFound(true)
+
+        val pref = SettingPreferences.getInstance(dataStore)
+        val settingViewModel = ViewModelProvider(this, ViewModelFactorySetting(pref)).get(SettingViewModel::class.java)
+        settingViewModel.getThemeSetting().observe(this, { isDarkModeActive ->
+            if (isDarkModeActive){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        })
+
         searchUserViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(SearchUserViewModel::class.java)
 
         searchUserViewModel.listUsers.observe(this, { itemsItem ->
-            adapter.setData(ArrayList(itemsItem))
+            if (itemsItem.isEmpty()){
+                showNotFound(true)
+            }else {
+                showNotFound(false)
+                adapter.setData(ArrayList(itemsItem))
+            }
         })
-
-//        searchUserViewModel.getSearchUser().observe(this, { searchUserItems ->
-//            val size = searchUserItems?.size
-//            if (searchUserItems != null && size != 0){
-//                adapter.setData(searchUserItems)
-//                showLoading(false)
-//                showRv(true)
-//            }else {
-//                showLoading(false)
-//                showRv(false)
-//                showNotFound(true)
-//            }
-//        })
 
         searchUserViewModel.isLoading.observe(this, { state ->
             showLoading(state)
@@ -155,7 +168,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.setting -> {
                 Toast.makeText(this, "click setting", Toast.LENGTH_SHORT).show()
-                Intent(Settings.ACTION_LOCALE_SETTINGS).also { startActivity(it) }
+                Intent(this, SettingActivity::class.java).also { startActivity(it) }
             }
         }
         return super.onOptionsItemSelected(item)

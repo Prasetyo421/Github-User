@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -14,7 +13,6 @@ import com.didi.githubuser.MainActivity.Companion.USERNAME
 import com.didi.githubuser.activity.DetailUserActivity
 import com.didi.githubuser.database.User
 import com.didi.githubuser.databinding.ListUserBinding
-import com.didi.githubuser.helper.UserDiffCallback
 
 class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
     private val listUsers = ArrayList<User>()

@@ -1,7 +1,6 @@
 package com.didi.githubuser.adapter
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +10,14 @@ import com.didi.githubuser.R
 import com.didi.githubuser.databinding.ListUserBinding
 import android.text.style.UnderlineSpan
 import android.text.SpannableString
+import android.widget.ImageView
+import com.bumptech.glide.request.RequestOptions
 import com.didi.githubuser.model.ItemsItem
 
 
-class SearchUserAdapter(): RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHolder>() {
+class SearchUserAdapter: RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHolder>() {
     private var mData = ArrayList<ItemsItem>()
-    private var onItemClicCallback: OnItemClickCallback? = null
+    private var onItemClickCallback: OnItemClickCallback? = null
     private var onBtnGithubClickCallback: OnBtnGithubClickCallback? = null
 
     fun setOnBtnGithubClickCallback(onBtnGithubClickCallback: OnBtnGithubClickCallback) {
@@ -28,7 +29,7 @@ class SearchUserAdapter(): RecyclerView.Adapter<SearchUserAdapter.SearchUserView
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
-        this.onItemClicCallback = onItemClickCallback
+        this.onItemClickCallback = onItemClickCallback
     }
 
     interface OnItemClickCallback {
@@ -44,23 +45,18 @@ class SearchUserAdapter(): RecyclerView.Adapter<SearchUserAdapter.SearchUserView
     inner class SearchUserViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val binding = ListUserBinding.bind(itemView)
         fun bind(searchUser: ItemsItem){
-            with(itemView){
-                binding.tvUsername.text = searchUser.login
-                val linkGithub = SpannableString(searchUser.htmlUrl)
-                linkGithub.setSpan(UnderlineSpan(), 0, linkGithub.length, 0)
-                binding.tvUrlHtml.text = linkGithub
+            binding.tvUsername.text = searchUser.login
+            val linkGithub = SpannableString(searchUser.htmlUrl)
+            linkGithub.setSpan(UnderlineSpan(), 0, linkGithub.length, 0)
+            binding.tvUrlHtml.text = linkGithub
 
-                val url = searchUser.avatarUrl
-                val uri = Uri.parse(url)
-                Glide.with(context)
-                    .load(uri)
-                    .into(binding.image)
-                itemView.setOnClickListener{
-                    onItemClicCallback?.onItemClicked(searchUser)
-                }
-                binding.tvUrlHtml.setOnClickListener {
-                    onBtnGithubClickCallback?.onBtnGithubClickCallback(searchUser)
-                }
+            val url = searchUser.avatarUrl
+            binding.image.loadImage(url)
+            itemView.setOnClickListener{
+                onItemClickCallback?.onItemClicked(searchUser)
+            }
+            binding.tvUrlHtml.setOnClickListener {
+                onBtnGithubClickCallback?.onBtnGithubClickCallback(searchUser)
             }
         }
     }
@@ -75,4 +71,12 @@ class SearchUserAdapter(): RecyclerView.Adapter<SearchUserAdapter.SearchUserView
     }
 
     override fun getItemCount(): Int = mData.size
+
+    fun ImageView.loadImage(url: String){
+        Glide.with(this.context)
+            .load(url)
+            .apply(RequestOptions().override(100, 100))
+            .centerCrop()
+            .into(this)
+    }
 }

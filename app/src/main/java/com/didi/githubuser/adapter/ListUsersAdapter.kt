@@ -12,10 +12,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.didi.githubuser.R
 import com.didi.githubuser.databinding.ListUserBinding
-import com.didi.githubuser.model.ListUser
+import com.didi.githubuser.model.ResponseItem
 
 class ListUsersAdapter: RecyclerView.Adapter<ListUsersAdapter.ListUsersViewHolder>() {
-    private val mData = ArrayList<ListUser>()
+    private val mData = ArrayList<ResponseItem>()
     private var onItemClickCallback: OnItemClickCallback? = null
     private var onBtnGithubClickCallback: OnBtnGithubClickCallback? = null
 
@@ -24,7 +24,7 @@ class ListUsersAdapter: RecyclerView.Adapter<ListUsersAdapter.ListUsersViewHolde
     }
 
     interface OnBtnGithubClickCallback {
-        fun onItemClicked(data: ListUser)
+        fun onItemClicked(data: ResponseItem)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
@@ -32,11 +32,11 @@ class ListUsersAdapter: RecyclerView.Adapter<ListUsersAdapter.ListUsersViewHolde
     }
 
     interface OnItemClickCallback {
-        fun onItemCLicked(data: ListUser)
+        fun onItemCLicked(data: ResponseItem)
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(item: ArrayList<ListUser>){
+    fun setData(item: ArrayList<ResponseItem>){
         mData.clear()
         mData.addAll(item)
         notifyDataSetChanged()
@@ -44,23 +44,20 @@ class ListUsersAdapter: RecyclerView.Adapter<ListUsersAdapter.ListUsersViewHolde
 
     inner class ListUsersViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val binding = ListUserBinding.bind(itemView)
-        fun bind(listUser: ListUser){
-            with(itemView){
-                val url = listUser.avatarUrl
-                val linkGithub = SpannableString(listUser.htmlUrl)
-                linkGithub.setSpan(UnderlineSpan(), 0, linkGithub.length, 0)
+        fun bind(listUser: ResponseItem){
+            val url = listUser.avatarUrl
+            val linkGithub = SpannableString(listUser.htmlUrl)
+            linkGithub.setSpan(UnderlineSpan(), 0, linkGithub.length, 0)
 
-                binding.image.loadImage(url)
-                binding.tvUsername.text = listUser.login
-                binding.tvUrlHtml.text = linkGithub
-                itemView.setOnClickListener{
-                    onItemClickCallback?.onItemCLicked(listUser)
-                }
+            binding.image.loadImage(url)
+            binding.tvUsername.text = listUser.login
+            binding.tvUrlHtml.text = linkGithub
+            itemView.setOnClickListener{
+                onItemClickCallback?.onItemCLicked(listUser)
+            }
 
-                binding.tvUrlHtml.setOnClickListener {
-                    onBtnGithubClickCallback?.onItemClicked(listUser)
-                }
-
+            binding.tvUrlHtml.setOnClickListener {
+                onBtnGithubClickCallback?.onItemClicked(listUser)
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.didi.githubuser.repository
 
 import android.app.Application
-import android.service.autofill.UserData
 import androidx.lifecycle.LiveData
 import com.didi.githubuser.database.User
 import com.didi.githubuser.database.UserDao
@@ -33,6 +32,6 @@ class UserRepository(application: Application) {
     }
 
     fun deleteByUsername(username: String){
-        executorService.execute { mUserDao.deleteByusername(username) }
+        executorService.execute { mUserDao.deleteByUsername(username) }
     }
 }

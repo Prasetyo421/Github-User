@@ -4,21 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.didi.githubuser.BuildConfig.GITHUB_API_KEY
 import com.didi.githubuser.activity.DetailUserActivity
-import com.didi.githubuser.model.DetailUser
 import com.didi.githubuser.model.ResponseDetailUser
-import com.didi.githubuser.model.ResponseSearchUser
 import com.didi.githubuser.networking.ApiConfig
-import com.didi.githubuser.networking.ApiService
-import com.loopj.android.http.AsyncHttpClient
-import com.loopj.android.http.AsyncHttpResponseHandler
-import cz.msebera.android.httpclient.Header
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 
 class DetailUserViewModel: ViewModel() {
     companion object {

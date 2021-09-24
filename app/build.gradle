@@ -17,7 +17,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GITHUB_API_KEY", "\"token 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\"")
+        buildConfigField("String", "GITHUB_API_KEY", "\"token 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\"")
         buildConfigField("String", "OPENWEATHER_API_KEY", "\"d8b21c07ae373d57cedb303d944e393e\"")
     }
 
@@ -70,7 +70,10 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
 
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test:rules:1.4.0'
 }

@@ -18,5 +18,5 @@ interface UserDao {
     fun getAllUsers() : LiveData<List<User>>
 
     @Query("DELETE FROM user WHERE login = :username")
-    fun deleteByusername(username: String)
+    fun deleteByUsername(username: String)
 }

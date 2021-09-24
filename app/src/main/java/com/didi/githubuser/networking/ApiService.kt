@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.http.*
 import com.didi.githubuser.BuildConfig.GITHUB_API_KEY
 import com.didi.githubuser.model.ResponseFollow
+import com.didi.githubuser.model.ResponseItem
 
 interface ApiService {
     @Headers("Authorization: $GITHUB_API_KEY")
@@ -24,14 +25,11 @@ interface ApiService {
     @GET("users/{username}/followers")
     fun getFollowers(
         @Path("username") username: String
-    ): Call<List<ResponseFollow>>
+    ): Call<List<ResponseItem>>
 
     @Headers("Authorization: $GITHUB_API_KEY")
     @GET("users/{username}/following")
     fun getFollowing(
         @Path("username") username: String
-    ): Call<List<ResponseFollow>>
-
-
-
+    ): Call<List<ResponseItem>>
 }

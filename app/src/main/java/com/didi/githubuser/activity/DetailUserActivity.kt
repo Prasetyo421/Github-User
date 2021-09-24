@@ -1,10 +1,10 @@
 package com.didi.githubuser.activity
 
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
@@ -17,7 +17,9 @@ import com.didi.githubuser.helper.SectionsPagerAdapter
 import com.didi.githubuser.helper.ZoomOutPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.request.RequestOptions
 import com.didi.githubuser.MainActivity
+import com.didi.githubuser.MainActivity.Companion.TEST
 import com.didi.githubuser.ViewModel.FavoriteAddUpdateViewModel
 import com.didi.githubuser.ViewModel.ViewModelFactory
 import com.didi.githubuser.database.User
@@ -29,9 +31,8 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var detailUserViewModel: DetailUserViewModel
     private lateinit var userAddUpdateViewModel: FavoriteAddUpdateViewModel
     private lateinit var detailUser: User
-    private lateinit var listFavorite: List<User>
-    private var isFavorite: Boolean = false
     lateinit var username: String
+    private var isFavorite: Boolean = false
 
     companion object {
         @StringRes
@@ -45,27 +46,40 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        showLoading(true)
 
         val bundle: Bundle? = intent.extras
         username = bundle?.getString(MainActivity.USERNAME) as String
 
+        userAddUpdateViewModel = obtainViewModel(this)
+
         detailUserViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailUserViewModel::class.java)
         setUser(username)
+
+        detailUserViewModel.isLoading.observe(this, { isLoading ->
+            showLoading(isLoading)
+        })
+
+        userAddUpdateViewModel.getAllUser().observe(this, { listUser ->
+            setFavorite(false)
+            listUser.forEach {
+                if (it.login.equals(username)){
+                    Log.d("test", "name: ${it.login}")
+                    setFavorite(true)
+                    setIcon(true)
+                }
+            }
+            Log.d(TEST, "isFavorite in getAll: $isFavorite")
+        })
 
         detailUserViewModel.detailUser.observe(this, { detailUserItem ->
             if (detailUserItem != null){
                 showLoading(false)
-//                username = detailUserItem.login
                 detailUser = User(login = detailUserItem.login,
                 avatarUrl = detailUserItem.avatarUrl,
                 url = detailUserItem.url, htmlUrl = detailUserItem.htmlUrl)
 
                 val url = detailUserItem.avatarUrl
-                val uri = Uri.parse(url)
-                Glide.with(this)
-                    .load(uri)
-                    .into(binding.avatar)
+                binding.avatar.loadImage(url)
 
                 val name = detailUserItem.name
                 val location = detailUserItem.location
@@ -97,10 +111,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
             }
         })
 
-
-        userAddUpdateViewModel = obtainViewModel(this)
-
-        val sectionsPagerAdapter = username.let { SectionsPagerAdapter(this, it) }
+        val sectionsPagerAdapter = SectionsPagerAdapter(this, username)
         val viewPager: ViewPager2 = binding.viewPager
         viewPager.setPageTransformer(ZoomOutPageTransformer())
         viewPager.adapter = sectionsPagerAdapter
@@ -112,25 +123,10 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(false)
-        initCollapsingToolbar(username as String)
+        initCollapsingToolbar(username)
         binding.collapsingToolbarLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGrey))
         binding.collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white))
         binding.fabAdd.setOnClickListener(this)
-
-        userAddUpdateViewModel.getAllUser().observe(this, {
-                listUser ->
-            listFavorite = listUser
-            Log.d("test", "isFavorite1: $isFavorite")
-            listFavorite.forEach {
-                if (it.login.equals(username)){
-                    isFavorite = true
-                }
-            }
-            Log.d("test", "isFavorit2: $isFavorite")
-            if (isFavorite){
-                binding.fabAdd.setImageResource(R.drawable.bg_search)
-            }
-        })
 
     }
 
@@ -145,18 +141,30 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(this, "fab click", Toast.LENGTH_SHORT).show()
                 if (!isFavorite){
                     userAddUpdateViewModel.insert(detailUser)
-                    binding.fabAdd.setImageResource(R.drawable.bg_search)
+                    setIcon(true)
                 }else {
                     Log.d("test", "delete: username $username")
                     userAddUpdateViewModel.deleteByUsername(username)
-//                    userAddUpdateViewModel.delete(detailUser as User)
-                    binding.fabAdd.setImageResource(R.drawable.ic_baseline_favorite_24)
+                    setIcon(false)
                 }
             }
         }
     }
 
-    private fun initCollapsingToolbar(tittle: String) {
+    private fun setFavorite(isFavorite: Boolean){
+        this.isFavorite = isFavorite
+    }
+
+    private fun setIcon(isFavorite: Boolean){
+        Log.d("test", "isFavorite in setIcon(): $isFavorite")
+        if (isFavorite){
+            binding.fabAdd.setImageResource(R.drawable.bg_search)
+        }else {
+            binding.fabAdd.setImageResource(R.drawable.ic_baseline_favorite_24)
+        }
+    }
+
+    private fun initCollapsingToolbar(title: String) {
         val collapsingToolbar = binding.collapsingToolbarLayout
         collapsingToolbar.title = " "
         val appBarLayout = binding.appBar
@@ -169,7 +177,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                     scrollRange = appBarLayout.totalScrollRange
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.title = tittle
+                    collapsingToolbar.title = title
                     isShow = true
                 } else if (isShow) {
                     collapsingToolbar.title = " "
@@ -198,7 +206,10 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         return true
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
+    fun ImageView.loadImage(url: String){
+        Glide.with(this.context)
+            .load(url)
+            .apply(RequestOptions().override(100, 100))
+            .into(this)
     }
 }

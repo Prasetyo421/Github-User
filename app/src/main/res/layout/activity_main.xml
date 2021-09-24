@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -32,15 +33,6 @@
                     android:queryHint="username"
                     android:searchIcon="@drawable/ic_baseline_person_search_24" />
 
-                <!--            <ImageView-->
-                <!--                android:id="@+id/btn_setting"-->
-                <!--                android:layout_width="30dp"-->
-                <!--                android:layout_height="30dp"-->
-                <!--                android:src="@drawable/ic_baseline_settings_24"-->
-                <!--                android:layout_marginTop="-5dp"-->
-                <!--                android:layout_marginStart="20dp"-->
-                <!--                android:contentDescription="@string/setting_language" />-->
-
             </LinearLayout>
 
         </androidx.appcompat.widget.Toolbar>
@@ -52,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/appBar"
-        android:visibility="invisible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,9 +73,12 @@
         android:id="@+id/imgNotFound"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_below="@id/appBar"
+        android:layout_alignBottom="@+id/rvSearchUser"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/username_not_found"
         android:src="@drawable/ic_baseline_search_off_24"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:contentDescription="@string/username_not_found"/>
+        tools:visibility="gone" />
 
 </RelativeLayout>

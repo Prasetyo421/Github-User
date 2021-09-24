@@ -12,11 +12,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.didi.githubuser.MainActivity.Companion.TEST
+import com.didi.githubuser.MainActivity.Companion.USERNAME
 import com.didi.githubuser.ViewModel.ListUsersViewModel
 import com.didi.githubuser.activity.DetailUserActivity
 import com.didi.githubuser.adapter.ListUsersAdapter
 import com.didi.githubuser.databinding.FragmentFollowBinding
-import com.didi.githubuser.model.ListUser
+import com.didi.githubuser.model.ResponseItem
 
 class FollowFragment : Fragment() {
     private var _binding: FragmentFollowBinding? = null
@@ -24,6 +26,8 @@ class FollowFragment : Fragment() {
 
     companion object {
         private const val ARG_SECTION_NUMBER = "section_number"
+        const val FOLLOWERS = "followers"
+        const val FOLLOWING = "following"
         @JvmStatic
         fun newInstance(index: Int, username: String) =
             FollowFragment().apply {
@@ -45,53 +49,74 @@ class FollowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = ListUsersAdapter()
         val listUsersViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(ListUsersViewModel::class.java)
-        val username = arguments?.getString("username")
+        val username = arguments?.getString(USERNAME)
 
-        listUsersViewModel.getListUser().observe(viewLifecycleOwner, { listUserItems ->
-            showLoading(false)
-            Log.d("test size", listUserItems.size.toString())
-            val size = listUserItems.size
+        listUsersViewModel.isLoading.observe(viewLifecycleOwner, { isLoading ->
+            showLoading(isLoading)
+        })
+
+        val index = arguments?.getInt(ARG_SECTION_NUMBER, 0)
+        if (index == 0 ){
+            listUsersViewModel.isLoading.observe(viewLifecycleOwner, { isLoading ->
+                showLoading(isLoading)
+            })
+            showLoading(true)
+            showEmpty(false)
+            if (username != null) {
+                listUsersViewModel.setListUser(FOLLOWERS, username)
+            }
+        }else{
+            showLoading(true)
+            showEmpty(false)
+            if (username != null) {
+                listUsersViewModel.setListUser(FOLLOWING, username)
+            }
+        }
+
+        listUsersViewModel.listUsers.observe(viewLifecycleOwner, { listFollow ->
+            Log.d(TEST, "get list")
+            Log.d("test size", listFollow.size.toString())
+            val size = listFollow.size
             if (size != 0){
-                adapter.setData(listUserItems)
+                adapter.setData(ArrayList(listFollow))
                 showList(true)
             }else {
                 Log.d("test", "show empty")
                 showEmpty(true)
             }
         })
-        adapter.notifyDataSetChanged()
+
+//        listUsersViewModel.getListUser().observe(viewLifecycleOwner, { listUserItems ->
+//            showLoading(false)
+//            Log.d("test size", listUserItems.size.toString())
+//            val size = listUserItems.size
+//            if (size != 0){
+//                adapter.setData(listUserItems)
+//                showList(true)
+//            }else {
+//                Log.d("test", "show empty")
+//                showEmpty(true)
+//            }
+//        })
         binding.rvListUser.layoutManager = LinearLayoutManager(view.context)
         binding.rvListUser.adapter = adapter
         adapter.setOnItemClickCallback(object : ListUsersAdapter.OnItemClickCallback{
-            override fun onItemCLicked(data: ListUser) {
-                val mMove = Intent(view.context, DetailUserActivity::class.java)
-                mMove.putExtra("username", data.login)
-                startActivity(mMove)
+            override fun onItemCLicked(data: ResponseItem) {
+                val move = Intent(view.context, DetailUserActivity::class.java)
+                move.putExtra(USERNAME, data.login)
+                startActivity(move)
             }
         })
         adapter.setOnBtnGithubClickCallback(object : ListUsersAdapter.OnBtnGithubClickCallback{
-            override fun onItemClicked(data: ListUser) {
+
+            override fun onItemClicked(data: ResponseItem) {
                 val url = data.htmlUrl
-                val mMove = Intent(ACTION_VIEW)
-                mMove.data = Uri.parse(url)
-                startActivity(mMove)
+                val move = Intent(ACTION_VIEW)
+                move.data = Uri.parse(url)
+                startActivity(move)
             }
 
         })
-        val index = arguments?.getInt(ARG_SECTION_NUMBER, 0)
-        if (index == 0 ){
-            showLoading(true)
-            showEmpty(false)
-            if (username != null) {
-                listUsersViewModel.setListUser("followers", username)
-            }
-        }else{
-            showLoading(true)
-            showEmpty(false)
-            if (username != null) {
-                listUsersViewModel.setListUser("following", username)
-            }
-        }
     }
 
     private fun showList(state: Boolean){
