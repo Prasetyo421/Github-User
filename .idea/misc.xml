@@ -13,6 +13,8 @@
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/empty_background.xml" value="0.2" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/github_mark_background.xml" value="0.2" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/ic_baseline_chevron_right_24.xml" value="0.19166666666666668" />
+        <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/ic_baseline_circle_24.xml" value="0.1" />
+        <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.1" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.19166666666666668" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/ic_baseline_keyboard_backspace_24.xml" value="0.19814814814814816" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.19166666666666668" />
@@ -20,7 +22,9 @@
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.21666666666666667" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/ic_baseline_search_off_24.xml" value="0.19166666666666668" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.21666666666666667" />
+        <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/ic_baseline_settings_24_black.xml" value="0.1" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/ic_launcher_background.xml" value="0.21666666666666667" />
+        <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/icon_launcher_background.xml" value="0.1" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/my_custom_tab_layout.xml" value="0.21333333333333335" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/tab_color_selector.xml" value="0.21333333333333335" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/drawable/tab_layout_selector.xml" value="0.21333333333333335" />
@@ -56,6 +60,7 @@
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/mipmap-anydpi-v26/ic_launcher_app.xml" value="0.18888888888888888" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/mipmap-anydpi-v26/ic_launcher_app_round.xml" value="0.18888888888888888" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.19166666666666668" />
+        <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/mipmap-anydpi-v26/icon_launcher.xml" value="0.1" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.xml" value="0.18888888888888888" />
         <entry key="..\:/latihan/kotlin/AndroidStudioProject/submission dicoding/Github User API/app/src/main/res/xml/xml.xml" value="0.1" />
       </map>
