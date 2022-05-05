@@ -18,9 +18,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.didi.githubuser.ViewModel.SearchUserViewModel
-import com.didi.githubuser.ViewModel.SettingViewModel
-import com.didi.githubuser.ViewModel.ViewModelFactorySetting
+import com.didi.githubuser.viewModel.SearchUserViewModel
+import com.didi.githubuser.viewModel.SettingViewModel
+import com.didi.githubuser.viewModel.ViewModelFactorySetting
 import com.didi.githubuser.activity.DetailUserActivity
 import com.didi.githubuser.activity.FavoriteActivity
 import com.didi.githubuser.activity.SettingActivity
@@ -49,28 +49,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val pref = SettingPreferences.getInstance(dataStore)
         val settingViewModel = ViewModelProvider(this, ViewModelFactorySetting(pref)).get(SettingViewModel::class.java)
-        settingViewModel.getThemeSetting().observe(this, { isDarkModeActive ->
-            if (isDarkModeActive){
+        settingViewModel.getThemeSetting().observe(this) { isDarkModeActive ->
+            if (isDarkModeActive) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }else {
+            } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-        })
+        }
 
         searchUserViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(SearchUserViewModel::class.java)
 
-        searchUserViewModel.listUsers.observe(this, { itemsItem ->
-            if (itemsItem.isEmpty()){
+        searchUserViewModel.listUsers.observe(this) { itemsItem ->
+            if (itemsItem.isEmpty()) {
                 showNotFound(true)
-            }else {
+            } else {
                 showNotFound(false)
                 adapter.setData(ArrayList(itemsItem))
             }
-        })
+        }
 
-        searchUserViewModel.isLoading.observe(this, { state ->
+        searchUserViewModel.isLoading.observe(this) { state ->
             showLoading(state)
-        })
+        }
 
         adapter = SearchUserAdapter()
 
@@ -122,16 +122,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             binding.rvSearchUser.visibility = View.GONE
         }else {
             binding.imgNotFound.visibility = View.GONE
-        }
-    }
-
-    private fun showRv(state: Boolean){
-        if (state){
-            binding.rvSearchUser.visibility = View.VISIBLE
-            binding.imgNotFound.visibility = View.GONE
-            binding.progressbar.visibility = View.GONE
-        }else {
-            binding.rvSearchUser.visibility = View.GONE
         }
     }
 

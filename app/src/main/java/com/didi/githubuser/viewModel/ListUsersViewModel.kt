@@ -1,4 +1,4 @@
-package com.didi.githubuser.ViewModel
+package com.didi.githubuser.viewModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.didi.githubuser.fragment.FollowFragment.Companion.FOLLOWERS
 import com.didi.githubuser.fragment.FollowFragment.Companion.FOLLOWING
-import com.didi.githubuser.model.ResponseFollow
 import com.didi.githubuser.model.ResponseItem
 import com.didi.githubuser.networking.ApiConfig
 import retrofit2.Call

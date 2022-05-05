@@ -1,4 +1,4 @@
-package com.didi.githubuser.ViewModel
+package com.didi.githubuser.viewModel
 
 import android.app.Application
 import androidx.lifecycle.LiveData
@@ -13,14 +13,6 @@ class FavoriteAddUpdateViewModel(application: Application) : ViewModel() {
 
     fun insert(user: User){
         mUserRepository.insert(user)
-    }
-
-    fun update(user: User){
-        mUserRepository.update(user)
-    }
-
-    fun delete(user: User){
-        mUserRepository.delete(user)
     }
 
     fun deleteByUsername(username: String){

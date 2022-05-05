@@ -1,4 +1,4 @@
-package com.didi.githubuser.ViewModel
+package com.didi.githubuser.viewModel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
@@ -21,7 +21,7 @@ class ViewModelFactory private constructor(private val mApplication: Application
         }
     }
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)){
             return FavoriteViewModel(mApplication) as T
         }else if (modelClass.isAssignableFrom(FavoriteAddUpdateViewModel::class.java)){

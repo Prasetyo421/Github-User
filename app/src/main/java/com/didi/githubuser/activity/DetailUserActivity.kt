@@ -1,30 +1,30 @@
 package com.didi.githubuser.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.didi.githubuser.R
-import com.didi.githubuser.ViewModel.DetailUserViewModel
-import com.didi.githubuser.databinding.ActivityDetailUserBinding
-import com.didi.githubuser.helper.SectionsPagerAdapter
-import com.didi.githubuser.helper.ZoomOutPageTransformer
-import com.google.android.material.tabs.TabLayoutMediator
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.request.RequestOptions
 import com.didi.githubuser.MainActivity
 import com.didi.githubuser.MainActivity.Companion.TEST
-import com.didi.githubuser.ViewModel.FavoriteAddUpdateViewModel
-import com.didi.githubuser.ViewModel.ViewModelFactory
+import com.didi.githubuser.R
+import com.didi.githubuser.viewModel.DetailUserViewModel
+import com.didi.githubuser.viewModel.FavoriteAddUpdateViewModel
+import com.didi.githubuser.viewModel.ViewModelFactory
 import com.didi.githubuser.database.User
+import com.didi.githubuser.databinding.ActivityDetailUserBinding
+import com.didi.githubuser.helper.SectionsPagerAdapter
+import com.didi.githubuser.helper.ZoomOutPageTransformer
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
+import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityDetailUserBinding
@@ -33,14 +33,6 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var detailUser: User
     lateinit var username: String
     private var isFavorite: Boolean = false
-
-    companion object {
-        @StringRes
-        private val TAB_TITTLES = intArrayOf(
-            R.string.followers,
-            R.string.following
-        )
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,71 +44,63 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
         userAddUpdateViewModel = obtainViewModel(this)
 
-        detailUserViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailUserViewModel::class.java)
+        detailUserViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[DetailUserViewModel::class.java]
         setUser(username)
 
-        detailUserViewModel.isLoading.observe(this, { isLoading ->
+        detailUserViewModel.isLoading.observe(this) { isLoading ->
             showLoading(isLoading)
-        })
+        }
 
-        userAddUpdateViewModel.getAllUser().observe(this, { listUser ->
+        userAddUpdateViewModel.getAllUser().observe(this) { listUser ->
             setFavorite(false)
             listUser.forEach {
-                if (it.login.equals(username)){
+                if (it.login.equals(username)) {
                     Log.d("test", "name: ${it.login}")
                     setFavorite(true)
                     setIcon(true)
                 }
             }
             Log.d(TEST, "isFavorite in getAll: $isFavorite")
-        })
+        }
 
-        detailUserViewModel.detailUser.observe(this, { detailUserItem ->
-            if (detailUserItem != null){
+
+        detailUserViewModel.detailUser.observe(this) { detailUserItem ->
+            if (detailUserItem != null) {
                 showLoading(false)
-                detailUser = User(login = detailUserItem.login,
-                avatarUrl = detailUserItem.avatarUrl,
-                url = detailUserItem.url, htmlUrl = detailUserItem.htmlUrl)
+                detailUser = User(
+                    login = detailUserItem.login,
+                    avatarUrl = detailUserItem.avatarUrl,
+                    url = detailUserItem.url, htmlUrl = detailUserItem.htmlUrl
+                )
 
                 val url = detailUserItem.avatarUrl
                 binding.avatar.loadImage(url)
 
                 val name = detailUserItem.name
-                val location = detailUserItem.location
+                val location = detailUserItem.location ?: ""
 
                 val nameLocation = "$name, $location"
-                binding.tvName.text = nameLocation
-                binding.tvBio.text = detailUserItem.bio
-                binding.tvCompany.text = detailUserItem.company
-                binding.tvEmail.text = detailUserItem.email
-                if (detailUserItem.bio != "null"){
-                    binding.tvBio.text = detailUserItem.bio
-                }else {
-                    binding.tvBio.visibility = View.GONE
+                with(binding) {
+                    tvName.text = nameLocation
+                    tvBio.text = detailUserItem.bio ?: ""
+                    tvCompany.text = detailUserItem.company ?: ""
+                    tvEmail.text = detailUserItem.email ?: ""
+                    tvJmlhFollowers.text = detailUserItem.followers.toString()
+                    tvJmlhFollowing.text = detailUserItem.following.toString()
+                    tvJmlhRepositories.text = detailUserItem.publicRepos.toString()
                 }
-                if (detailUserItem.company != "null"){
-                    binding.tvCompany.text = detailUserItem.company
-                }else {
-                    binding.tvCompany.visibility = View.GONE
-                }
-                if (detailUserItem.email != "null"){
-                    binding.tvEmail.text = detailUserItem.email
-                }else {
-                    binding.tvEmail.visibility = View.GONE
-                }
-
-                binding.tvJmlhFollowers.text = detailUserItem.followers.toString()
-                binding.tvJmlhFollowing.text = detailUserItem.following.toString()
-                binding.tvJmlhRepositories.text = detailUserItem.publicRepos.toString()
             }
-        })
+        }
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this, username)
         val viewPager: ViewPager2 = binding.viewPager
         viewPager.setPageTransformer(ZoomOutPageTransformer())
         viewPager.adapter = sectionsPagerAdapter
         val tabs = binding.tabs
-        TabLayoutMediator(tabs, viewPager){ tab, position ->
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
             tab.text = resources.getString(TAB_TITTLES[position])
         }.attach()
 
@@ -124,9 +108,22 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(false)
         initCollapsingToolbar(username)
-        binding.collapsingToolbarLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGrey))
-        binding.collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white))
-        binding.fabAdd.setOnClickListener(this)
+        with(binding) {
+            collapsingToolbarLayout.setBackgroundColor(
+                ContextCompat.getColor(
+                    this@DetailUserActivity,
+                    R.color.colorGrey
+                )
+            )
+            collapsingToolbarLayout.setCollapsedTitleTextColor(
+                ContextCompat.getColor(
+                    this@DetailUserActivity,
+                    R.color.white
+                )
+            )
+            fabAdd.setOnClickListener(this@DetailUserActivity)
+
+        }
 
     }
 
@@ -136,13 +133,13 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(v?.id){
+        when (v?.id) {
             R.id.fab_add -> {
                 Toast.makeText(this, "fab click", Toast.LENGTH_SHORT).show()
-                if (!isFavorite){
+                if (!isFavorite) {
                     userAddUpdateViewModel.insert(detailUser)
                     setIcon(true)
-                }else {
+                } else {
                     Log.d("test", "delete: username $username")
                     userAddUpdateViewModel.deleteByUsername(username)
                     setIcon(false)
@@ -151,15 +148,15 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun setFavorite(isFavorite: Boolean){
+    private fun setFavorite(isFavorite: Boolean) {
         this.isFavorite = isFavorite
     }
 
-    private fun setIcon(isFavorite: Boolean){
+    private fun setIcon(isFavorite: Boolean) {
         Log.d("test", "isFavorite in setIcon(): $isFavorite")
-        if (isFavorite){
+        if (isFavorite) {
             binding.fabAdd.setImageResource(R.drawable.bg_search)
-        }else {
+        } else {
             binding.fabAdd.setImageResource(R.drawable.ic_baseline_favorite_24)
         }
     }
@@ -187,16 +184,16 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         })
     }
 
-    private fun setUser(username: String?){
-        if (username != null){
+    private fun setUser(username: String?) {
+        if (username != null) {
             detailUserViewModel.setDetailUser(username)
         }
     }
 
-    private fun showLoading(state: Boolean){
-        if (state){
+    private fun showLoading(state: Boolean) {
+        if (state) {
             binding.shimmerDetailUser.visibility = View.VISIBLE
-        }else {
+        } else {
             binding.shimmerDetailUser.visibility = View.GONE
         }
     }
@@ -206,10 +203,18 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         return true
     }
 
-    fun ImageView.loadImage(url: String){
+    private fun ImageView.loadImage(url: String) {
         Glide.with(this.context)
             .load(url)
             .apply(RequestOptions().override(100, 100))
             .into(this)
+    }
+
+    companion object {
+        @StringRes
+        private val TAB_TITTLES = intArrayOf(
+            R.string.followers,
+            R.string.following
+        )
     }
 }

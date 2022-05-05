@@ -2,8 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/parent">
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvListUser"
@@ -39,7 +38,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="40dp"
         android:contentDescription="@string/empty"
-        android:src="@drawable/icons8_empty_box_50"
+        android:src="@mipmap/empty"
         android:visibility="visible" />
 
 </RelativeLayout>

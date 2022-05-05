@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -11,10 +12,10 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.didi.githubuser.R
-import com.didi.githubuser.ViewModel.FavoriteViewModel
-import com.didi.githubuser.ViewModel.SettingViewModel
-import com.didi.githubuser.ViewModel.ViewModelFactory
-import com.didi.githubuser.ViewModel.ViewModelFactorySetting
+import com.didi.githubuser.viewModel.FavoriteViewModel
+import com.didi.githubuser.viewModel.SettingViewModel
+import com.didi.githubuser.viewModel.ViewModelFactory
+import com.didi.githubuser.viewModel.ViewModelFactorySetting
 import com.didi.githubuser.adapter.FavoriteAdapter
 import com.didi.githubuser.databinding.ActivityFavoriteBinding
 import com.didi.githubuser.helper.SettingPreferences
@@ -37,9 +38,15 @@ class FavoriteActivity : AppCompatActivity() {
         favoriteViewModel = obtainViewModel(this)
         favoriteViewModel.getAllUsers().observe(this, { listUsers ->
             Log.d("test", "size: ${listUsers.size}")
-            if (listUsers != null){
+            if (listUsers.isNotEmpty()){
                 Log.d("test", "size listusers: ${listUsers.size}")
                 adapter.setListUser(listUsers)
+            } else {
+                settingViewModel.getNameSetting().observe(this, { name ->
+                    binding.tvInfo.visibility = View.VISIBLE
+                    val text = "$name belum menambahkan favorite"
+                    binding.tvInfo.text = text
+                })
             }
         })
 

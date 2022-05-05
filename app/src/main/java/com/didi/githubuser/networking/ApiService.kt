@@ -5,7 +5,6 @@ import com.didi.githubuser.model.ResponseSearchUser
 import retrofit2.Call
 import retrofit2.http.*
 import com.didi.githubuser.BuildConfig.GITHUB_API_KEY
-import com.didi.githubuser.model.ResponseFollow
 import com.didi.githubuser.model.ResponseItem
 
 interface ApiService {

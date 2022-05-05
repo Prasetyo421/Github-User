@@ -2,12 +2,6 @@ package com.didi.githubuser.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ResponseFollow(
-
-	@field:SerializedName("Response")
-	val response: List<ResponseItem>
-)
-
 data class ResponseItem(
 
 	@field:SerializedName("login")

@@ -6,15 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
-import com.didi.githubuser.ViewModel.SettingViewModel
+import com.didi.githubuser.viewModel.SettingViewModel
 import com.didi.githubuser.databinding.ActivitySettingBinding
 import com.didi.githubuser.helper.SettingPreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import com.didi.githubuser.ViewModel.ViewModelFactorySetting
+import com.didi.githubuser.viewModel.ViewModelFactorySetting
 
 class SettingActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingBinding
@@ -59,6 +60,7 @@ class SettingActivity : AppCompatActivity() {
         binding.btnSettingName.setOnClickListener {
             name = binding.edtName.text.toString().trim()
             settingViewModel.setNameSetting(name)
+            Toast.makeText(this, "berhasil merubah nama: $name", Toast.LENGTH_SHORT).show()
         }
     }
 }

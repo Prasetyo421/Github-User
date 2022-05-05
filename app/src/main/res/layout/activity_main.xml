@@ -73,12 +73,10 @@
         android:id="@+id/imgNotFound"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_below="@id/appBar"
-        android:layout_alignBottom="@+id/rvSearchUser"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_vertical"
         android:contentDescription="@string/username_not_found"
         android:src="@drawable/ic_baseline_search_off_24"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
 </RelativeLayout>

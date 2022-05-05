@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.didi.githubuser.MainActivity.Companion.TEST
 import com.didi.githubuser.MainActivity.Companion.USERNAME
-import com.didi.githubuser.ViewModel.ListUsersViewModel
+import com.didi.githubuser.viewModel.ListUsersViewModel
 import com.didi.githubuser.activity.DetailUserActivity
 import com.didi.githubuser.adapter.ListUsersAdapter
 import com.didi.githubuser.databinding.FragmentFollowBinding
@@ -85,19 +85,6 @@ class FollowFragment : Fragment() {
                 showEmpty(true)
             }
         })
-
-//        listUsersViewModel.getListUser().observe(viewLifecycleOwner, { listUserItems ->
-//            showLoading(false)
-//            Log.d("test size", listUserItems.size.toString())
-//            val size = listUserItems.size
-//            if (size != 0){
-//                adapter.setData(listUserItems)
-//                showList(true)
-//            }else {
-//                Log.d("test", "show empty")
-//                showEmpty(true)
-//            }
-//        })
         binding.rvListUser.layoutManager = LinearLayoutManager(view.context)
         binding.rvListUser.adapter = adapter
         adapter.setOnItemClickCallback(object : ListUsersAdapter.OnItemClickCallback{

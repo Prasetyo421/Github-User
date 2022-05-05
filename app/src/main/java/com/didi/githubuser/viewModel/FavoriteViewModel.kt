@@ -1,4 +1,4 @@
-package com.didi.githubuser.ViewModel
+package com.didi.githubuser.viewModel
 
 import android.app.Application
 import androidx.lifecycle.LiveData
